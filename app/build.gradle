@@ -1,0 +1,135 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    defaultConfig {
+        applicationId "com.gamebuddy.bigshow"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            minifyEnabled false
+            zipAlignEnabled true
+            shrinkResources true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            versionNameSuffix "-debug"
+            minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+//            applicationIdSuffix ".debug"
+        }
+    }
+
+    lintOptions {
+        //for butterknife
+        disable 'InvalidPackage'
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+
+    applicationVariants.all { variant ->
+        if (variant.buildType.name.equals('release')) {
+            variant.outputs.each { output ->
+                def versionCode = output.versionCode
+                def oldFile = output.outputFile
+                def buildName
+                def releaseApkName
+
+                variant.productFlavors.each { product ->
+                    buildName = product.name
+                }
+
+                releaseApkName = "guangchi" + '-' + 'tv' + '-' + getDate() + '.apk'
+                output.outputFile = new File(oldFile.parent, releaseApkName)
+            }
+        }
+    }
+}
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmm')
+    return formattedDate
+}
+
+def SUPPORT_VERSION = "23.0.+"
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    // Basic
+    compile 'com.android.support:support-annotations:' + SUPPORT_VERSION
+    compile 'com.android.support:cardview-v7:' + SUPPORT_VERSION
+    compile 'com.android.support:support-v4:' + SUPPORT_VERSION
+    compile 'com.android.support:appcompat-v7:' + SUPPORT_VERSION
+    compile 'com.android.support:recyclerview-v7:' + SUPPORT_VERSION
+    compile 'com.android.support:design:' + SUPPORT_VERSION
+    compile 'com.google.android.gms:play-services-ads:8.1.0'
+    compile 'com.android.support:multidex:1.0.1'
+    // LeakCanary
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+    //Butterknife
+    compile 'com.jakewharton:butterknife:7.0.1'
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
+    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    // Network
+    // compile 'com.squareup.okhttp3:okhttp:3.1.2'
+    // ReactiveX
+    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'io.reactivex:rxjava:1.0.14'
+    // Component For RxJava
+    compile 'com.github.pwittchen:prefser:2.0.1'
+    // Component For View
+    compile 'com.kennyc:multistateview:1.1'
+    compile 'io.nlopez.smartadapters:library:1.3.0'
+    compile 'com.ogaclejapan.smarttablayout:library:1.6.0@aar'
+    compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.0@aar'
+    compile 'com.cjj.materialrefeshlayout:library:1.3.0'
+    compile 'com.zhy:percent-support-extends:1.0.6'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    // Glide
+    compile 'com.github.bumptech.glide:glide:3.6.1'
+    compile 'jp.wasabeef:glide-transformations:1.3.1'
+    // Android-ObservableScrollView
+    compile 'com.github.ksoichiro:android-observablescrollview:1.6.0'
+    compile 'com.nineoldandroids:library:2.4.0'
+    // Event Bus
+    compile 'de.greenrobot:eventbus:2.4.0'
+    // Soft Keyboard Listener
+    compile 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:1.0.0'
+    // Material Drawer
+    compile('com.mikepenz:materialdrawer:4.6.4@aar') {
+        transitive = true
+    }
+
+    // Lean Cloud
+    //avoscloud-sdk 为 LeanCloud基础包
+    compile ('cn.leancloud.android:avoscloud-sdk:v3.+')
+    //avoscloud-push 为推送与实时聊天需要的包
+    compile ('cn.leancloud.android:avoscloud-push:v3.+@aar'){transitive = true}
+    //avoscloud-statistics 为 LeanCloud 统计包
+    compile ('cn.leancloud.android:avoscloud-statistics:v3.+')
+    // pre-lollipop transition
+    compile 'com.kogitune:pre-lollipop-activity-transition:1.3.0'
+}

@@ -1,0 +1,81 @@
+package com.gamebuddy.bigshow.common.base;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.LayoutRes;
+import android.support.v7.app.AppCompatActivity;
+
+import com.github.pwittchen.prefser.library.Prefser;
+
+import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
+
+/**
+ * describe
+ * created by tindle
+ * created time 15/12/9 下午3:23
+ */
+public abstract class BaseActivity extends AppCompatActivity {
+
+    protected Context mContext;
+
+    //Lib for SharedPreferences
+    public Prefser prefser;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = this;
+        prefser = new Prefser(this);
+
+//        if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        }
+        if(getLayoutResId()!=0){
+            setContentView(getLayoutResId());
+        }
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        FlurryAgent.onPageView();
+//        MobclickAgent.onResume(mContext);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        MobclickAgent.onPause(mContext);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        FlurryAgent.onStartSession(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        FlurryAgent.onEndSession(this);
+    }
+
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        ButterKnife.bind(this);
+    }
+
+    abstract protected
+    @LayoutRes
+    int getLayoutResId();
+
+    // default eventbus methos
+    public void onEvent(Object object) {
+
+    }
+}
