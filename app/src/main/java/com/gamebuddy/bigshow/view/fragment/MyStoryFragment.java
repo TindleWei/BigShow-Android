@@ -24,7 +24,6 @@ import com.kogitune.activity_transition.ActivityTransitionLauncher;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import butterknife.Bind;
 import okhttp3.OkHttpClient;
@@ -80,7 +79,7 @@ public class MyStoryFragment extends BaseFragment {
         iv_cover = (ImageView)getView().findViewById(R.id.iv_cover);
         tv_logout = (TextView)getView().findViewById(R.id.tv_logout);
 
-        layout_create.setOnClickListener(new View.OnClickListener() {
+        iv_cover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -96,7 +95,7 @@ public class MyStoryFragment extends BaseFragment {
         tv_logout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                startRequest();
+                requestRandomData();
             }
         });
     }
@@ -112,14 +111,13 @@ public class MyStoryFragment extends BaseFragment {
 //        startLeanSegment();
 //    }
 
-    public void startRequest() {
+    public void requestRandomData() {
 
         Map<String,String> map = new HashMap<>();
-        map.put("q","superman");
         map.put("rating","g");
         map.put("limit","20");
 
-        ApiManager.getInstance().apiService.getSearchData2(map)
+        ApiManager.getInstance().apiService.getTranslateData(map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(new Action1<Throwable>() {
@@ -143,11 +141,12 @@ public class MyStoryFragment extends BaseFragment {
                     public void onNext(GiphyResponse giphyResponse) {
                         Log.e("TAG","on Next !");
                         try {
-                            if(giphyResponse.data.size()==0) return;
+                            if(giphyResponse.data.size()==0){
+                                Log.e("TAG","on size 0 !");
+                                return;
+                            }
 
-                            int num = new Random().nextInt(20);
-
-                            GiphyResponse.Data data = giphyResponse.data.get(num);
+                            GiphyResponse.Data data = giphyResponse.data.get(0);
                             String url = data.images.fixed_width.url;
                             imageUrl = url;
 
@@ -155,7 +154,7 @@ public class MyStoryFragment extends BaseFragment {
                                     .load(url)
                                     .asGif()
                                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                    .placeholder(R.mipmap.default_load_holder)
+                                    .placeholder(R.drawable.image_bg)
                                     .centerCrop()
                                     .crossFade()
                                     .into(iv_cover);

@@ -8,7 +8,6 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
-import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import rx.Observable;
 
@@ -24,7 +23,7 @@ public class ApiManager {
 
     public static ApiManager instance;
 
-    public static ApiManager getInstance(){
+    public static ApiManager getInstance() {
         if (null == instance) {
             synchronized (ApiManager.class) {
                 if (null == instance) {
@@ -39,7 +38,7 @@ public class ApiManager {
     private Retrofit retrofit = null;
 
     public ApiManager() {
-        if(retrofit==null){
+        if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(SERVER_URL)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -50,14 +49,18 @@ public class ApiManager {
     }
 
     public interface ApiService {
-        @GET ("gifs/search?api_key="+API_KEY)
-        Observable<GiphyResponse> getSearchData(@Query("q") String queryWord);
 
-        @GET ("gifs/search?api_key="+API_KEY)
-        Observable<GiphyResponse> getSearchData2(@QueryMap Map<String,String> options);
+        @GET("gifs/search?api_key=" + API_KEY)
+        Observable<GiphyResponse> getSearchData(@QueryMap Map<String, String> options); //q, limit, offset, rating, fmt
 
-        @GET ("gifs/translate?api_key="+API_KEY)
-        Observable<GiphyResponse> getTranslateData(@Query("q") String queryWord);
+        @GET("gifs/translate?api_key=" + API_KEY)
+        Observable<GiphyResponse> getTranslateData(@QueryMap Map<String, String> options); //s, rating, fmt
+
+        @GET("gifs/random?api_key=" + API_KEY)
+        Observable<GiphyResponse> getRandomData(@QueryMap Map<String, String> options); //tag, rating, fmt
+
+        @GET("gifs/trending?api_key=" + API_KEY)
+        Observable<GiphyResponse> getTrendingData(@QueryMap Map<String, String> options); //limit, rating, fmt
     }
 
 
