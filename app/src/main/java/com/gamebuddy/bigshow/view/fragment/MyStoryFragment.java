@@ -3,6 +3,7 @@ package com.gamebuddy.bigshow.view.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +17,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.gamebuddy.bigshow.R;
 import com.gamebuddy.bigshow.common.base.BaseFragment;
+import com.gamebuddy.bigshow.common.event.TransitionEvent;
 import com.gamebuddy.bigshow.core.net.ApiManager;
+import com.gamebuddy.bigshow.model.GiphyEntity;
 import com.gamebuddy.bigshow.model.GiphyResponse;
+import com.gamebuddy.bigshow.presenter.intent.GifData;
 import com.gamebuddy.bigshow.view.activity.PlotMakerActivity;
 import com.kogitune.activity_transition.ActivityTransitionLauncher;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import butterknife.Bind;
 import okhttp3.OkHttpClient;
@@ -41,6 +46,8 @@ import rx.schedulers.Schedulers;
  */
 public class MyStoryFragment extends BaseFragment {
 
+    private static final String TAG = "MyStoryFragment";
+
     @Bind(R.id.layout_create)
     RelativeLayout layout_create;
 
@@ -50,20 +57,13 @@ public class MyStoryFragment extends BaseFragment {
     @Bind(R.id.tv_content)
     EditText tv_content;
 
-    @Bind(R.id.tv_logout)
-    TextView tv_logout;
+    @Bind(R.id.tv_change)
+    TextView tv_change;
 
-    String imageUrl = "";
+    @Bind(R.id.layout_cardview)
+    CardView layout_cardview;
 
-    @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
+    GifData intentData = null;
 
     @Nullable
     @Override
@@ -75,16 +75,17 @@ public class MyStoryFragment extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        layout_create = (RelativeLayout)getView().findViewById(R.id.layout_create);
-        iv_cover = (ImageView)getView().findViewById(R.id.iv_cover);
-        tv_logout = (TextView)getView().findViewById(R.id.tv_logout);
+        layout_create = $(R.id.layout_create);
+        iv_cover = $(R.id.iv_cover);
+        tv_change = $(R.id.tv_change);
+        layout_cardview= $(R.id.layout_cardview);
 
         iv_cover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent intent = new Intent(getActivity(), PlotMakerActivity.class);
-                intent.putExtra("image_url", imageUrl);
+                intent.putExtra("data", intentData);
                 ActivityTransitionLauncher
                         .with(getActivity())
                         .from(v)
@@ -92,32 +93,22 @@ public class MyStoryFragment extends BaseFragment {
             }
         });
 
-        tv_logout.setOnClickListener(new View.OnClickListener(){
+        tv_change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 requestRandomData();
             }
         });
+        requestRandomData();
     }
-
-//    @OnClick(R.id.layout_create)
-//    public void jumpRecordActivity() {
-
-//        AVUser user = AVUser.getCurrentUser();
-//        JSONObject jsonStream = user.getJSONObject("stream");
-//        String res = jsonStream.toString();
-//        Intent intent = new Intent(getActivity(), PlotMakerActivity.class);
-//        startActivity(intent);
-//        startLeanSegment();
-//    }
 
     public void requestRandomData() {
 
-        Map<String,String> map = new HashMap<>();
-        map.put("rating","g");
-        map.put("limit","20");
+        Map<String, String> map = new HashMap<>();
+        map.put("rating", "g");
+        map.put("limit", "20");
 
-        ApiManager.getInstance().apiService.getTranslateData(map)
+        ApiManager.getInstance().apiService.getTrendingData(map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(new Action1<Throwable>() {
@@ -129,26 +120,33 @@ public class MyStoryFragment extends BaseFragment {
                 .subscribe(new Subscriber<GiphyResponse>() {
                     @Override
                     public void onCompleted() {
-                        Log.e("TAG","on Completed !");
+                        Log.e(TAG, "on Completed !");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e("TAG","on Error !");
+                        Log.e(TAG, "on Error !");
                     }
 
                     @Override
                     public void onNext(GiphyResponse giphyResponse) {
-                        Log.e("TAG","on Next !");
+                        Log.e(TAG, "on Next !");
                         try {
-                            if(giphyResponse.data.size()==0){
-                                Log.e("TAG","on size 0 !");
+                            if (giphyResponse.data.size() == 0) {
+                                Log.e(TAG, "on size 0 !");
                                 return;
                             }
 
-                            GiphyResponse.Data data = giphyResponse.data.get(0);
-                            String url = data.images.fixed_width.url;
-                            imageUrl = url;
+                            int num = new Random().nextInt(giphyResponse.data.size());
+
+                            GiphyEntity entity = giphyResponse.data.get(num);
+
+                            String url = entity.images.fixed_width.url;
+                            int width = Integer.valueOf(entity.images.fixed_height.width);
+                            int height = Integer.valueOf(entity.images.fixed_height.height);
+                            Log.e(TAG, "url: " + url);
+                            Log.e(TAG, "size w: " + width + " h: " + height);
+                            intentData = new GifData(url, width, height);
 
                             Glide.with(getContext())
                                     .load(url)
@@ -174,14 +172,6 @@ public class MyStoryFragment extends BaseFragment {
         return response.body().string();
     }
 
-//    @OnClick(R.id.tv_logout)
-//    public void logout() {
-//        AVUser.logOut();             //清除缓存用户对象
-//        AVUser currentUser = AVUser.getCurrentUser(); // 现在的currentUser是null了
-//        Intent intent = new Intent(getActivity(), LoginActivity.class);
-//        startActivity(intent);
-//        getActivity().finish();
-//    }
 
     public String requestStartSegment() {
         String url = "http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=dc6zaTOxFJmzC";
@@ -191,15 +181,32 @@ public class MyStoryFragment extends BaseFragment {
                 .build();
         OkHttpClient client = new OkHttpClient();
 
-        try{
+        try {
             Response response = client.newCall(request).execute();
             return response.body().string();
-        }catch (Exception e){
+        } catch (Exception e) {
             return "";
         }
     }
 
+    //    @OnClick(R.id.tv_change)
+//    public void logout() {
+//        AVUser.logOut();             //清除缓存用户对象
+//        AVUser currentUser = AVUser.getCurrentUser(); // 现在的currentUser是null了
+//        Intent intent = new Intent(getActivity(), LoginActivity.class);
+//        startActivity(intent);
+//        getActivity().finish();
+//    }
 
+    public void onEvent(TransitionEvent object) {
+        Log.e("TAG", "fuck");
+        layout_cardview.setAlpha(0);
+        layout_cardview.animate().setDuration(500).setStartDelay(600).alpha(1).start();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+    }
 }

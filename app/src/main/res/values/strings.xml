@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">BigShow-Android</string>
+    <string name="app_name">BigShow</string>
+    <string name="action_change_one">换一个</string>
+    <string name="tip_start_story">从这里开始制作一个故事</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

@@ -34,6 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if(getLayoutResId()!=0){
             setContentView(getLayoutResId());
         }
+        ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
     }
@@ -61,13 +62,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 //        FlurryAgent.onEndSession(this);
-    }
-
-
-    @Override
-    public void onContentChanged() {
-        super.onContentChanged();
-        ButterKnife.bind(this);
     }
 
     abstract protected

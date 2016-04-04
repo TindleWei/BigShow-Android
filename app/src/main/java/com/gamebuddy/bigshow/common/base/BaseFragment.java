@@ -1,12 +1,15 @@
 package com.gamebuddy.bigshow.common.base;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.github.pwittchen.prefser.library.Prefser;
 
-import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 import rx.Subscription;
 import rx.subscriptions.Subscriptions;
 
@@ -17,38 +20,58 @@ import rx.subscriptions.Subscriptions;
  */
 public abstract class BaseFragment extends Fragment {
 
-    public Prefser prefser;
-
-    protected Subscription mSubscription = Subscriptions.empty();
+    protected Subscription mSubscription;
+    protected Prefser prefser;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         prefser = new Prefser(getContext());
+        mSubscription = Subscriptions.empty();
+        EventBus.getDefault().register(this);
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        ButterKnife.bind(this, view);
+        //ButterKnife.bind(this, view);
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unsubscribe();
+    }
+
+    protected void unsubscribe() {
+        if (mSubscription != null && !mSubscription.isUnsubscribed()){
+            mSubscription.unsubscribe();
+        }
     }
 
     protected String getTitle() {
         return "";
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) mSubscription.unsubscribe();
+    /**
+     * findViewById简化
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends View> T $(int id) {
+        return (T) getView().findViewById(id);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-//        FlurryAgent.onPageView();
+    /**
+     * findViewById简化
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends View> T $(View v, int id) {
+        return (T) v.findViewById(id);
     }
 }
