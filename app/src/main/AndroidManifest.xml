@@ -46,6 +46,11 @@
             android:name=".view.activity.PlotEditerActivity"
             android:screenOrientation="portrait">
         </activity>
+
+        <activity
+            android:name=".view.activity.DialogActivity"
+            android:theme="@style/AppTheme.Dialog">
+        </activity>
     </application>
 
 </manifest>

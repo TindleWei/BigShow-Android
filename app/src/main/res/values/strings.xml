@@ -2,6 +2,11 @@
     <string name="app_name">BigShow</string>
     <string name="action_change_one">换一个</string>
     <string name="tip_start_story">从这里开始制作一个故事</string>
+    <string name="tip_first_story">从这里开始写下你的故事吧</string>
+    <string name="transition_dialog">transition_dialog</string>
+
+    <string name="toggle_end_off">有选项</string>
+    <string name="toggle_end_on">到此结束</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
