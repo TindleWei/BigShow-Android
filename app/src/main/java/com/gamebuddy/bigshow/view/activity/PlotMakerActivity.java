@@ -252,6 +252,33 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
         mCurlView.setSizeChangedObserver(new SizeChangedObserver());
         mCurlView.setCurrentIndex(0);
         mCurlView.setBackgroundColor(0x00000000);
+        mCurlView.setPageCurlListener(new CurlView.PageCurlListener() {
+            @Override
+            public void onCurlStart() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        iv_last_cover.setVisibility(View.GONE);
+                    }
+                });
+            }
+
+            @Override
+            public void onPageUp() {
+
+            }
+
+            @Override
+            public void onPageDown() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        iv_last_cover.setVisibility(View.VISIBLE);
+                    }
+                });
+
+            }
+        });
     }
 
     @Override
@@ -355,10 +382,12 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
         public void onSizeChanged(int w, int h) {
             if (w > h) {
                 mCurlView.setViewMode(CurlView.SHOW_ONE_PAGE);
-                mCurlView.setMargins(.1f, .05f, .1f, .05f);
+//                mCurlView.setMargins(.1f, .05f, .1f, .05f);
+                mCurlView.setMargins(.0f, .0f, .0f, .0f);
             } else {
                 mCurlView.setViewMode(CurlView.SHOW_ONE_PAGE);
-                mCurlView.setMargins(.1f, .1f, .1f, .1f);
+//                mCurlView.setMargins(.1f, .1f, .1f, .1f);
+                mCurlView.setMargins(.0f, .00f, .0f, .00f);
             }
         }
     }

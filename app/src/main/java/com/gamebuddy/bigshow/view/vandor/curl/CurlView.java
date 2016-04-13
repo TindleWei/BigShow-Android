@@ -123,7 +123,8 @@ public class CurlView extends GLSurfaceView implements View.OnTouchListener,
 	 * Initialize method.
 	 */
 	private void init(Context ctx) {
-		setZOrderOnTop(true);
+		//setZOrderOnTop(true);
+		setZOrderMediaOverlay(true);
 		getHolder().setFormat(PixelFormat.TRANSLUCENT);
 		setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 
@@ -182,6 +183,13 @@ public class CurlView extends GLSurfaceView implements View.OnTouchListener,
 				// If we were curling right page update current index.
 				if (mCurlState == CURL_RIGHT) {
 					++mCurrentIndex;
+				}
+			}
+			if(mPageCurlListener!=null){
+				if(mCurrentIndex==0){
+					mPageCurlListener.onPageDown();
+				}else if(mCurrentIndex==1){
+					mPageCurlListener.onPageUp();
 				}
 			}
 			mCurlState = CURL_NONE;
@@ -529,8 +537,11 @@ public class CurlView extends GLSurfaceView implements View.OnTouchListener,
 	 * pages in landscape
 	 */
 	private void startCurl(int page) {
-		switch (page) {
+		if(mPageCurlListener!=null){
+			mPageCurlListener.onCurlStart();
+		}
 
+		switch (page) {
 		// Once right side page is curled, first right page is assigned into
 		// curled page. And if there are more bitmaps available new bitmap is
 		// loaded into right side mesh.
@@ -814,5 +825,16 @@ public class CurlView extends GLSurfaceView implements View.OnTouchListener,
 		 */
 		public void onSizeChanged(int width, int height);
 	}
+
+	public interface PageCurlListener{
+		public void onCurlStart();
+		public void onPageUp();
+		public void onPageDown();
+	}
+	public PageCurlListener mPageCurlListener;
+	public void setPageCurlListener(PageCurlListener pageCurlListener){
+		this.mPageCurlListener = pageCurlListener;
+	}
+
 
 }

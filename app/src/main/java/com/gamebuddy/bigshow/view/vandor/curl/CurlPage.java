@@ -91,7 +91,7 @@ public class CurlPage {
 		// original Bitmap to it more efficiently? Immutable bitmap anyone?
 //		Bitmap bitmapTex = Bitmap.createBitmap(newW, newH, bitmap.getConfig());
 //		Bitmap bitmapTex = Bitmap.createBitmap(bitmap);
-		Bitmap bitmapTex = Bitmap.createBitmap(newW, newH,Bitmap.Config.ARGB_8888);
+		Bitmap bitmapTex = Bitmap.createBitmap(newW, newH,Bitmap.Config.RGB_565);
 
 		Canvas c = new Canvas(bitmapTex);
 		c.drawBitmap(bitmap, 0, 0, null);

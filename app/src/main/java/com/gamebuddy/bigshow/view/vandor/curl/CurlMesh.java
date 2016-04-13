@@ -53,7 +53,7 @@ public class CurlMesh {
 
 	// Colors for shadow. Inner one is the color drawn next to surface where
 	// shadowed area starts and outer one is color shadow ends to.
-	private static final float[] SHADOW_INNER_COLOR = { 0f, 0f, 0f, .5f };
+	private static final float[] SHADOW_INNER_COLOR = { 0f, 0f, 0f, .01f };
 	private static final float[] SHADOW_OUTER_COLOR = { 0f, 0f, 0f, .0f };
 
 	// Let's avoid using 'new' as much as possible. Meaning we introduce arrays
