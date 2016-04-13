@@ -41,19 +41,12 @@ public class CurlActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_curl);
 
-		int index = 0;
-		if (getLastNonConfigurationInstance() != null) {
-			index = (Integer) getLastNonConfigurationInstance();
-		}
 		mCurlView = (CurlView) findViewById(R.id.curl);
 		mCurlView.setPageProvider(new PageProvider());
 		mCurlView.setSizeChangedObserver(new SizeChangedObserver());
-		mCurlView.setCurrentIndex(index);
+		mCurlView.setCurrentIndex(0);
 		mCurlView.setBackgroundColor(0xFF202830);
 
-		// This is something somewhat experimental. Before uncommenting next
-		// line, please see method comments in CurlView.
-		// mCurlView.setEnableTouchPressure(true);
 	}
 
 	@Override

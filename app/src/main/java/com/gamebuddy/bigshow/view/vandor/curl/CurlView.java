@@ -17,6 +17,7 @@
 package com.gamebuddy.bigshow.view.vandor.curl;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.opengl.GLSurfaceView;
@@ -122,6 +123,10 @@ public class CurlView extends GLSurfaceView implements View.OnTouchListener,
 	 * Initialize method.
 	 */
 	private void init(Context ctx) {
+		setZOrderOnTop(true);
+		getHolder().setFormat(PixelFormat.TRANSLUCENT);
+		setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+
 		mRenderer = new CurlRenderer(this);
 		setRenderer(mRenderer);
 		setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);

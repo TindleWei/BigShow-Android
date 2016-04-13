@@ -89,7 +89,10 @@ public class CurlPage {
 
 		// TODO: Is there another way to create a bigger Bitmap and copy
 		// original Bitmap to it more efficiently? Immutable bitmap anyone?
-		Bitmap bitmapTex = Bitmap.createBitmap(newW, newH, bitmap.getConfig());
+//		Bitmap bitmapTex = Bitmap.createBitmap(newW, newH, bitmap.getConfig());
+//		Bitmap bitmapTex = Bitmap.createBitmap(bitmap);
+		Bitmap bitmapTex = Bitmap.createBitmap(newW, newH,Bitmap.Config.ARGB_8888);
+
 		Canvas c = new Canvas(bitmapTex);
 		c.drawBitmap(bitmap, 0, 0, null);
 

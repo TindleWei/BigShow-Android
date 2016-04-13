@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -25,6 +27,8 @@ import com.gamebuddy.bigshow.R;
 import com.gamebuddy.bigshow.common.base.BaseActivity;
 import com.gamebuddy.bigshow.common.event.TransitionEvent;
 import com.gamebuddy.bigshow.presenter.intent.GifData;
+import com.gamebuddy.bigshow.view.vandor.curl.CurlPage;
+import com.gamebuddy.bigshow.view.vandor.curl.CurlView;
 import com.kogitune.activity_transition.ActivityTransition;
 import com.kogitune.activity_transition.ExitActivityTransition;
 
@@ -70,7 +74,17 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
     @Bind(R.id.tv_choosen_2)
     TextView tv_choosen_2;
 
+    @Bind(R.id.curl)
+    CurlView mCurlView;
+
     List<Object> currentItems = new ArrayList<>();
+
+    GifData gifData;
+
+    int picConstantWidth;
+    int picConstantHeight;
+
+    Bitmap b = null;
 
     private ExitActivityTransition exitTransition;
 
@@ -93,19 +107,17 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
         layout_cardview.setAlpha(0);
         layout_cardview.animate().setDuration(500).setStartDelay(500).alpha(1).start();
 
-
-        GifData gifData = (GifData) getIntent().getSerializableExtra("data");
+        gifData = (GifData) getIntent().getSerializableExtra("data");
 
         if (gifData != null) {
             String url = gifData.url;
             int width = gifData.width;
             int height = gifData.height;
 
-
             float mDensity = getBaseContext().getResources().getDisplayMetrics().density;
             float mScreenWidth = getBaseContext().getResources().getDisplayMetrics().widthPixels;
-            int picConstantWidth = (int) (mScreenWidth - 2 * 20 * mDensity);
-            int picConstantHeight = (int) (mScreenWidth * 9 / 16);
+            picConstantWidth = (int) (mScreenWidth - 2 * 20 * mDensity);
+            picConstantHeight = (int) (mScreenWidth * 9 / 16);
 
             ViewGroup.LayoutParams lp = iv_last_cover.getLayoutParams();
             lp.width = picConstantWidth;
@@ -179,7 +191,7 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
             }
         });
 
-        tv_choosen_2.setOnClickListener(new View.OnClickListener(){
+        tv_choosen_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, DialogActivity.class);
@@ -192,6 +204,7 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
             }
         });
 
+        initCurlView();
     }
 
 
@@ -216,8 +229,8 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data==null) return;
-        switch (resultCode){
+        if (data == null) return;
+        switch (resultCode) {
             case RESULT_PLOT_CONTENT:
                 tv_plot_content.setText(data.getStringExtra("result"));
                 break;
@@ -227,6 +240,126 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
             case RESULT_PLOT_CHOOSE_2:
                 tv_choosen_2.setText(data.getStringExtra("result"));
                 break;
+        }
+    }
+
+    public void initCurlView() {
+        mCurlView = (CurlView) findViewById(R.id.curl);
+        ViewGroup.LayoutParams lp = mCurlView.getLayoutParams();
+        lp.width = picConstantWidth;
+        lp.height = picConstantHeight;
+        mCurlView.setPageProvider(new PageProvider());
+        mCurlView.setSizeChangedObserver(new SizeChangedObserver());
+        mCurlView.setCurrentIndex(0);
+        mCurlView.setBackgroundColor(0x00000000);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mCurlView.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mCurlView.onResume();
+    }
+
+    /**
+     * Bitmap provider.
+     */
+    private class PageProvider implements CurlView.PageProvider {
+
+        // Bitmap resources.
+        private int[] mBitmapIds = {R.drawable.world};// R.drawable.obama, R.drawable.road_rage,R.drawable.taipei_101,
+
+        @Override
+        public int getPageCount() {
+            return 1;
+        }
+
+        private Bitmap loadBitmap(int width, int height, int index) {
+//            Bitmap b = Bitmap.createBitmap(width, height,
+//                    Bitmap.Config.ARGB_8888);
+//            b.eraseColor(0xFFFFFFFF);
+//            Canvas c = new Canvas(b);
+//            Drawable d = getResources().getDrawable(mBitmapIds[index]);
+//
+//            int margin = 7;
+//            int border = 3;
+//            Rect r = new Rect(margin, margin, width - margin, height - margin);
+//
+//            int imageWidth = r.width() - (border * 2);
+//            int imageHeight = imageWidth * d.getIntrinsicHeight()
+//                    / d.getIntrinsicWidth();
+//            if (imageHeight > r.height() - (border * 2)) {
+//                imageHeight = r.height() - (border * 2);
+//                imageWidth = imageHeight * d.getIntrinsicWidth()
+//                        / d.getIntrinsicHeight();
+//            }
+//
+//            r.left += ((r.width() - imageWidth) / 2) - border;
+//            r.right = r.left + imageWidth + border + border;
+//            r.top += ((r.height() - imageHeight) / 2) - border;
+//            r.bottom = r.top + imageHeight + border + border;
+//
+//            Paint p = new Paint();
+//            p.setColor(0xFFFF00FF);
+//            c.drawRect(r, p);
+//            r.left += border;
+//            r.right -= border;
+//            r.top += border;
+//            r.bottom -= border;
+//
+//            d.setBounds(r);
+//            d.draw(c);
+
+            try {
+                b = Glide.
+                        with(mContext).
+                        load(gifData.url).
+                        asBitmap().
+                        into(picConstantWidth, picConstantHeight). // Width and height
+                        get();
+                b.setWidth(picConstantWidth);
+                b.setHeight(picConstantHeight);
+//                Bitmap.Config config = b.getConfig();
+                Log.e("TAG","fuck");
+            } catch (Exception e) {
+                Log.e("TAG","fuck");
+            }
+            return b;
+        }
+
+        @Override
+        public void updatePage(CurlPage page, int width, int height, int index) {
+
+            switch (index) {
+                // First case is image on front side, solid colored back.
+                case 0: {
+                    Bitmap front = loadBitmap(width, height, 0);
+                    page.setTexture(front, CurlPage.SIDE_BOTH);
+                    page.setColor(Color.rgb(200, 200, 200), CurlPage.SIDE_BACK);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * CurlView size changed observer.
+     */
+    private class SizeChangedObserver implements CurlView.SizeChangedObserver {
+        @Override
+        public void onSizeChanged(int w, int h) {
+            if (w > h) {
+                mCurlView.setViewMode(CurlView.SHOW_ONE_PAGE);
+                mCurlView.setMargins(.1f, .05f, .1f, .05f);
+            } else {
+                mCurlView.setViewMode(CurlView.SHOW_ONE_PAGE);
+                mCurlView.setMargins(.1f, .1f, .1f, .1f);
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ import com.kogitune.activity_transition.ExitActivityTransition;
  * created by tindle
  * created time 16/3/14 下午1:19
  */
-public class PlotEditerActivity extends BaseActivity{
+public class PlotGridActivity extends BaseActivity{
 
     private ExitActivityTransition exitTransition;
 
