@@ -93,8 +93,12 @@ public class CurlPage {
 //		Bitmap bitmapTex = Bitmap.createBitmap(bitmap);
 		Bitmap bitmapTex = Bitmap.createBitmap(newW, newH,Bitmap.Config.RGB_565);
 
-		Canvas c = new Canvas(bitmapTex);
-		c.drawBitmap(bitmap, 0, 0, null);
+		try{
+			Canvas c = new Canvas(bitmapTex);
+			c.drawBitmap(bitmap, 0, 0, null);
+		}catch (Exception e){
+			//java.lang.RuntimeException: Canvas: trying to use a recycled bitmap
+		}
 
 		// Calculate final texture coordinates.
 		float texX = (float) w / newW;

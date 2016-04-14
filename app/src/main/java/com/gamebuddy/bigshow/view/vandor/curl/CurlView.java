@@ -123,7 +123,7 @@ public class CurlView extends GLSurfaceView implements View.OnTouchListener,
 	 * Initialize method.
 	 */
 	private void init(Context ctx) {
-		//setZOrderOnTop(true);
+//		setZOrderOnTop(true);
 		setZOrderMediaOverlay(true);
 		getHolder().setFormat(PixelFormat.TRANSLUCENT);
 		setEGLConfigChooser(8, 8, 8, 8, 16, 0);

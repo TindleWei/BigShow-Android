@@ -251,7 +251,7 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
         mCurlView.setPageProvider(new PageProvider());
         mCurlView.setSizeChangedObserver(new SizeChangedObserver());
         mCurlView.setCurrentIndex(0);
-        mCurlView.setBackgroundColor(0x00000000);
+        mCurlView.setBackgroundColor(0xFFFFFFFF);
         mCurlView.setPageCurlListener(new CurlView.PageCurlListener() {
             @Override
             public void onCurlStart() {
