@@ -60,7 +60,6 @@ public abstract class BaseRootActivity extends AppCompatActivity {
     //Lib for SharedPreferences
     public Prefser prefser;
 
-
     public class HomeTabEntity {
         String name;
         Class clazz;

@@ -1,7 +1,9 @@
 package com.gamebuddy.bigshow.core.net;
 
+import com.gamebuddy.bigshow.model.GiphyEntity;
 import com.gamebuddy.bigshow.model.GiphyResponse;
 
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Retrofit;
@@ -10,6 +12,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * describe
@@ -51,7 +59,7 @@ public class ApiManager {
     public interface ApiService {
 
         @GET("gifs/search?api_key=" + API_KEY)
-        Observable<GiphyResponse> getSearchData(@QueryMap Map<String, String> options); //q, limit, offset, rating, fmt
+        Observable<GiphyResponse<List<GiphyEntity>>> getSearchData(@QueryMap Map<String, String> options); //q, limit, offset, rating, fmt
 
         @GET("gifs/translate?api_key=" + API_KEY)
         Observable<GiphyResponse> getTranslateData(@QueryMap Map<String, String> options); //s, rating, fmt
@@ -60,7 +68,33 @@ public class ApiManager {
         Observable<GiphyResponse> getRandomData(@QueryMap Map<String, String> options); //tag, rating, fmt
 
         @GET("gifs/trending?api_key=" + API_KEY)
-        Observable<GiphyResponse> getTrendingData(@QueryMap Map<String, String> options); //limit, rating, fmt
+        Observable<GiphyResponse<List<GiphyEntity>>> getTrendingData(@QueryMap Map<String, String> options); //limit, rating, fmt
+    }
+
+    public Subscription getSearchData(Subscriber<List<GiphyEntity>> subscriber, final Map<String, String> map) {
+        return apiService.getSearchData(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                })
+                .map(new Func1<GiphyResponse, List<GiphyEntity>>() {
+                    @Override
+                    public List<GiphyEntity> call(GiphyResponse giphyResponse) {
+                        return response2List(giphyResponse);
+                    }
+                })
+                .subscribe(subscriber);
+    }
+
+    public List<GiphyEntity> response2List(GiphyResponse<List<GiphyEntity>> response){
+        if(response!=null){
+            return response.data;
+        }
+        return null;
     }
 
 

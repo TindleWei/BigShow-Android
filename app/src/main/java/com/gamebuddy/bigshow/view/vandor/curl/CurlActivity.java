@@ -16,7 +16,7 @@
 
 package com.gamebuddy.bigshow.view.vandor.curl;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -24,119 +24,133 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 
 import com.gamebuddy.bigshow.R;
+import com.gamebuddy.bigshow.common.base.BaseActivity;
+import com.gamebuddy.bigshow.view.activity.SearchGridActivity;
 
 /**
  * Simple Activity for curl testing.
- * 
+ *
  * @author harism
  */
-public class CurlActivity extends Activity {
+public class CurlActivity extends BaseActivity {
 
-	private CurlView mCurlView;
+    private CurlView mCurlView;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_curl);
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_curl;
+    }
 
-		mCurlView = (CurlView) findViewById(R.id.curl);
-		mCurlView.setPageProvider(new PageProvider());
-		mCurlView.setSizeChangedObserver(new SizeChangedObserver());
-		mCurlView.setCurrentIndex(0);
-		mCurlView.setBackgroundColor(0xFF202830);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-	}
+        mCurlView = (CurlView) findViewById(R.id.curl);
+        mCurlView.setPageProvider(new PageProvider());
+        mCurlView.setSizeChangedObserver(new SizeChangedObserver());
+        mCurlView.setCurrentIndex(0);
+        mCurlView.setBackgroundColor(0xFF202830);
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		mCurlView.onPause();
-	}
+        findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
+            @Override
+                public void onClick(View v) {
+                        startActivity(new Intent(mContext, SearchGridActivity.class));
+                    }
+            });
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		mCurlView.onResume();
-	}
+    }
 
-	@Override
-	public Object onRetainNonConfigurationInstance() {
-		return mCurlView.getCurrentIndex();
-	}
+    @Override
+    public void onPause() {
+        super.onPause();
+        mCurlView.onPause();
+    }
 
-	/**
-	 * Bitmap provider.
-	 */
-	private class PageProvider implements CurlView.PageProvider {
+    @Override
+    public void onResume() {
+        super.onResume();
+        mCurlView.onResume();
+    }
 
-		// Bitmap resources.
-		private int[] mBitmapIds = { R.drawable.obama, R.drawable.road_rage,
-				R.drawable.taipei_101, R.drawable.world };
+//	@Override
+//	public Object onRetainNonConfigurationInstance() {
+//		return mCurlView.getCurrentIndex();
+//	}
 
-		@Override
-		public int getPageCount() {
-			return 1;
-		}
+    /**
+     * Bitmap provider.
+     */
+    private class PageProvider implements CurlView.PageProvider {
 
-		private Bitmap loadBitmap(int width, int height, int index) {
-			Bitmap b = Bitmap.createBitmap(width, height,
-					Bitmap.Config.ARGB_8888);
-			b.eraseColor(0xFFFFFFFF);
-			Canvas c = new Canvas(b);
-			Drawable d = getResources().getDrawable(mBitmapIds[index]);
+        // Bitmap resources.
+        private int[] mBitmapIds = {R.drawable.obama, R.drawable.road_rage,
+                R.drawable.taipei_101, R.drawable.world};
 
-			int margin = 7;
-			int border = 3;
-			Rect r = new Rect(margin, margin, width - margin, height - margin);
+        @Override
+        public int getPageCount() {
+            return 1;
+        }
 
-			int imageWidth = r.width() - (border * 2);
-			int imageHeight = imageWidth * d.getIntrinsicHeight()
-					/ d.getIntrinsicWidth();
-			if (imageHeight > r.height() - (border * 2)) {
-				imageHeight = r.height() - (border * 2);
-				imageWidth = imageHeight * d.getIntrinsicWidth()
-						/ d.getIntrinsicHeight();
-			}
+        private Bitmap loadBitmap(int width, int height, int index) {
+            Bitmap b = Bitmap.createBitmap(width, height,
+                    Bitmap.Config.ARGB_8888);
+            b.eraseColor(0xFFFFFFFF);
+            Canvas c = new Canvas(b);
+            Drawable d = getResources().getDrawable(mBitmapIds[index]);
 
-			r.left += ((r.width() - imageWidth) / 2) - border;
-			r.right = r.left + imageWidth + border + border;
-			r.top += ((r.height() - imageHeight) / 2) - border;
-			r.bottom = r.top + imageHeight + border + border;
+            int margin = 7;
+            int border = 3;
+            Rect r = new Rect(margin, margin, width - margin, height - margin);
 
-			Paint p = new Paint();
-			p.setColor(0xFFC0C0C0);
-			c.drawRect(r, p);
-			r.left += border;
-			r.right -= border;
-			r.top += border;
-			r.bottom -= border;
+            int imageWidth = r.width() - (border * 2);
+            int imageHeight = imageWidth * d.getIntrinsicHeight()
+                    / d.getIntrinsicWidth();
+            if (imageHeight > r.height() - (border * 2)) {
+                imageHeight = r.height() - (border * 2);
+                imageWidth = imageHeight * d.getIntrinsicWidth()
+                        / d.getIntrinsicHeight();
+            }
 
-			d.setBounds(r);
-			d.draw(c);
+            r.left += ((r.width() - imageWidth) / 2) - border;
+            r.right = r.left + imageWidth + border + border;
+            r.top += ((r.height() - imageHeight) / 2) - border;
+            r.bottom = r.top + imageHeight + border + border;
 
-			return b;
-		}
+            Paint p = new Paint();
+            p.setColor(0xFFC0C0C0);
+            c.drawRect(r, p);
+            r.left += border;
+            r.right -= border;
+            r.top += border;
+            r.bottom -= border;
 
-		@Override
-		public void updatePage(CurlPage page, int width, int height, int index) {
+            d.setBounds(r);
+            d.draw(c);
 
-			switch (index) {
-			// First case is image on front side, solid colored back.
-			case 0: {
-				Bitmap front = loadBitmap(width, height, 0);
-				page.setTexture(front, CurlPage.SIDE_BOTH);
-				page.setColor(Color.rgb(200, 200, 200), CurlPage.SIDE_BACK);
-				break;
-			}
-			// Second case is image on back side, solid colored front.
-			case 1: {
-				Bitmap back = loadBitmap(width, height, 2);
-				page.setTexture(back, CurlPage.SIDE_BACK);
-				page.setColor(Color.rgb(127, 140, 180), CurlPage.SIDE_FRONT);
-				break;
-			}
+            return b;
+        }
+
+        @Override
+        public void updatePage(CurlPage page, int width, int height, int index) {
+
+            switch (index) {
+                // First case is image on front side, solid colored back.
+                case 0: {
+                    Bitmap front = loadBitmap(width, height, 0);
+                    page.setTexture(front, CurlPage.SIDE_BOTH);
+                    page.setColor(Color.rgb(200, 200, 200), CurlPage.SIDE_BACK);
+                    break;
+                }
+                // Second case is image on back side, solid colored front.
+                case 1: {
+                    Bitmap back = loadBitmap(width, height, 2);
+                    page.setTexture(back, CurlPage.SIDE_BACK);
+                    page.setColor(Color.rgb(127, 140, 180), CurlPage.SIDE_FRONT);
+                    break;
+                }
 //			// Third case is images on both sides.
 //			case 2: {
 //				Bitmap front = loadBitmap(width, height, 1);
@@ -165,25 +179,25 @@ public class CurlActivity extends Activity {
 //				page.setColor(Color.argb(127, 255, 255, 255),
 //						CurlPage.SIDE_BACK);
 //				break;
-			}
-		}
+            }
+        }
 
-	}
+    }
 
-	/**
-	 * CurlView size changed observer.
-	 */
-	private class SizeChangedObserver implements CurlView.SizeChangedObserver {
-		@Override
-		public void onSizeChanged(int w, int h) {
-			if (w > h) {
-				mCurlView.setViewMode(CurlView.SHOW_TWO_PAGES);
-				mCurlView.setMargins(.1f, .05f, .1f, .05f);
-			} else {
-				mCurlView.setViewMode(CurlView.SHOW_ONE_PAGE);
-				mCurlView.setMargins(.1f, .1f, .1f, .1f);
-			}
-		}
-	}
+    /**
+     * CurlView size changed observer.
+     */
+    private class SizeChangedObserver implements CurlView.SizeChangedObserver {
+        @Override
+        public void onSizeChanged(int w, int h) {
+            if (w > h) {
+                mCurlView.setViewMode(CurlView.SHOW_TWO_PAGES);
+                mCurlView.setMargins(.1f, .05f, .1f, .05f);
+            } else {
+                mCurlView.setViewMode(CurlView.SHOW_ONE_PAGE);
+                mCurlView.setMargins(.1f, .1f, .1f, .1f);
+            }
+        }
+    }
 
 }

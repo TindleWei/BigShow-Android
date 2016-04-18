@@ -23,10 +23,10 @@ import com.gamebuddy.bigshow.model.GiphyEntity;
 import com.gamebuddy.bigshow.model.GiphyResponse;
 import com.gamebuddy.bigshow.presenter.intent.GifData;
 import com.gamebuddy.bigshow.view.activity.PlotMakerActivity;
-import com.kogitune.activity_transition.ActivityTransitionLauncher;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -86,10 +86,11 @@ public class MyStoryFragment extends BaseFragment {
 
                 Intent intent = new Intent(getActivity(), PlotMakerActivity.class);
                 intent.putExtra("data", intentData);
-                ActivityTransitionLauncher
-                        .with(getActivity())
-                        .from(v)
-                        .launch(intent);
+//                ActivityTransitionLauncher
+//                        .with(getActivity())
+//                        .from(v)
+//                        .launch(intent);
+                startActivity(intent);
             }
         });
 
@@ -117,7 +118,7 @@ public class MyStoryFragment extends BaseFragment {
                         throwable.printStackTrace();
                     }
                 })
-                .subscribe(new Subscriber<GiphyResponse>() {
+                .subscribe(new Subscriber<GiphyResponse<List<GiphyEntity>>>() {
                     @Override
                     public void onCompleted() {
                         Log.e(TAG, "on Completed !");
@@ -129,7 +130,7 @@ public class MyStoryFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onNext(GiphyResponse giphyResponse) {
+                    public void onNext(GiphyResponse<List<GiphyEntity>> giphyResponse) {
                         Log.e(TAG, "on Next !");
                         try {
                             if (giphyResponse.data.size() == 0) {
@@ -138,8 +139,8 @@ public class MyStoryFragment extends BaseFragment {
                             }
 
                             int num = new Random().nextInt(giphyResponse.data.size());
-
-                            GiphyEntity entity = giphyResponse.data.get(num);
+                            List<GiphyEntity> list = giphyResponse.data;
+                            GiphyEntity entity = list.get(num);
 
                             String url = entity.images.fixed_width.url;
                             int width = Integer.valueOf(entity.images.fixed_height.width);
@@ -188,15 +189,6 @@ public class MyStoryFragment extends BaseFragment {
             return "";
         }
     }
-
-    //    @OnClick(R.id.tv_change)
-//    public void logout() {
-//        AVUser.logOut();             //清除缓存用户对象
-//        AVUser currentUser = AVUser.getCurrentUser(); // 现在的currentUser是null了
-//        Intent intent = new Intent(getActivity(), LoginActivity.class);
-//        startActivity(intent);
-//        getActivity().finish();
-//    }
 
     public void onEvent(TransitionEvent object) {
         Log.e("TAG", "fuck");

@@ -21,6 +21,11 @@
     <color name="tab_text_normal">#929292</color>
     <color name="tab_text_selected">#F75251</color>
 
+    <color name="google_red">#FF6F60</color>
+    <color name="google_blue">#0057e7</color>
+    <color name="google_green">#008744</color>
+    <color name="google_yellow">#ffa700</color>
+
     <!--gamebuddy old item style-->
     <color name="gray">#80808080</color>
     <color name="item_bg_selected">#66010208</color>

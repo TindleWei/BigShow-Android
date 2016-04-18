@@ -9,6 +9,8 @@ import com.github.pwittchen.prefser.library.Prefser;
 
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import rx.Subscription;
+import rx.subscriptions.Subscriptions;
 
 /**
  * describe
@@ -18,57 +20,63 @@ import de.greenrobot.event.EventBus;
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected Context mContext;
-
-    //Lib for SharedPreferences
     public Prefser prefser;
+    protected Subscription mSubscription;
+
+    protected String TAG = getClass().getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        prefser = new Prefser(this);
-
-//        if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//        }
-        if(getLayoutResId()!=0){
+        if (getLayoutResId() != 0) {
             setContentView(getLayoutResId());
         }
+        prefser = new Prefser(this);
+        mSubscription = Subscriptions.empty();
         ButterKnife.bind(this);
-
         EventBus.getDefault().register(this);
+    }
+
+    protected void unsubscribe() {
+        if (mSubscription != null && !mSubscription.isUnsubscribed()){
+            mSubscription.unsubscribe();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unsubscribe();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        FlurryAgent.onPageView();
-//        MobclickAgent.onResume(mContext);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPause(mContext);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-//        FlurryAgent.onStartSession(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-//        FlurryAgent.onEndSession(this);
     }
 
     abstract protected
     @LayoutRes
     int getLayoutResId();
 
-    // default eventbus methos
+    /**
+     * default eventbus methos
+     */
     public void onEvent(Object object) {
 
     }

@@ -1,12 +1,14 @@
 package com.gamebuddy.bigshow.view.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -25,18 +27,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.gamebuddy.bigshow.R;
 import com.gamebuddy.bigshow.common.base.BaseActivity;
-import com.gamebuddy.bigshow.common.event.TransitionEvent;
+import com.gamebuddy.bigshow.common.event.GridPhotoEvent;
 import com.gamebuddy.bigshow.presenter.intent.GifData;
 import com.gamebuddy.bigshow.view.vandor.curl.CurlPage;
 import com.gamebuddy.bigshow.view.vandor.curl.CurlView;
-import com.kogitune.activity_transition.ActivityTransition;
 import com.kogitune.activity_transition.ExitActivityTransition;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import de.greenrobot.event.EventBus;
 import io.nlopez.smartadapters.utils.ViewEventListener;
 
 /**
@@ -77,6 +77,12 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
     @Bind(R.id.curl)
     CurlView mCurlView;
 
+    @Bind(R.id.layout_cover_option)
+    LinearLayout layout_cover_option;
+
+    @Bind(R.id.tv_save)
+    TextView tv_save;
+
     List<Object> currentItems = new ArrayList<>();
 
     GifData gifData;
@@ -104,6 +110,36 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
         }
         super.onCreate(savedInstanceState);
 
+//        exitTransition = ActivityTransition.with(getIntent()).duration(500).to(findViewById(R.id.iv_last_cover)).start(savedInstanceState);
+
+        initData();
+        initEvent();
+
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    b = Glide.
+                            with(mContext).
+                            load(gifData.url).
+                            asBitmap().
+                            into(picConstantWidth, picConstantHeight). // Width and height
+                            get();
+                    if (b != null) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initCurlView();
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                }
+            }
+        }.start();
+    }
+
+    public void initData() {
         layout_cardview.setAlpha(0);
         layout_cardview.animate().setDuration(500).setStartDelay(500).alpha(1).start();
 
@@ -137,9 +173,9 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
                         .into(iv_last_cover);
             }
         }
+    }
 
-        exitTransition = ActivityTransition.with(getIntent()).duration(500).to(findViewById(R.id.iv_last_cover)).start(savedInstanceState);
-
+    public void initEvent() {
         tv_plot_content.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,20 +240,33 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
             }
         });
 
-        initCurlView();
+        findViewById(R.id.btn_cover_search).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext, SearchGridActivity.class));
+            }
+        });
+
+        tv_save.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
 
     @Override
     public void onBackPressed() {
-        layout_cardview.animate().setDuration(300).alpha(0).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                exitTransition.exit(PlotMakerActivity.this);
-                EventBus.getDefault().post(new TransitionEvent());
-
-            }
-        });
+//        layout_cardview.animate().setDuration(300).alpha(0).setListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                exitTransition.exit(PlotMakerActivity.this);
+//                EventBus.getDefault().post(new TransitionEvent());
+//
+//            }
+//        });
+        super.onBackPressed();
 
     }
 
@@ -265,7 +314,12 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
 
             @Override
             public void onPageUp() {
-
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        layout_cover_option.setVisibility(View.VISIBLE);
+                    }
+                });
             }
 
             @Override
@@ -293,6 +347,13 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
         mCurlView.onResume();
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //mCurlView.getHolder().getSurface().release();
+    }
+
     /**
      * Bitmap provider.
      */
@@ -307,55 +368,44 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
         }
 
         private Bitmap loadBitmap(int width, int height, int index) {
-//            Bitmap b = Bitmap.createBitmap(width, height,
-//                    Bitmap.Config.ARGB_8888);
-//            b.eraseColor(0xFFFFFFFF);
-//            Canvas c = new Canvas(b);
-//            Drawable d = getResources().getDrawable(mBitmapIds[index]);
-//
-//            int margin = 7;
-//            int border = 3;
-//            Rect r = new Rect(margin, margin, width - margin, height - margin);
-//
-//            int imageWidth = r.width() - (border * 2);
-//            int imageHeight = imageWidth * d.getIntrinsicHeight()
-//                    / d.getIntrinsicWidth();
-//            if (imageHeight > r.height() - (border * 2)) {
-//                imageHeight = r.height() - (border * 2);
-//                imageWidth = imageHeight * d.getIntrinsicWidth()
-//                        / d.getIntrinsicHeight();
-//            }
-//
-//            r.left += ((r.width() - imageWidth) / 2) - border;
-//            r.right = r.left + imageWidth + border + border;
-//            r.top += ((r.height() - imageHeight) / 2) - border;
-//            r.bottom = r.top + imageHeight + border + border;
-//
-//            Paint p = new Paint();
-//            p.setColor(0xFFFF00FF);
-//            c.drawRect(r, p);
-//            r.left += border;
-//            r.right -= border;
-//            r.top += border;
-//            r.bottom -= border;
-//
-//            d.setBounds(r);
-//            d.draw(c);
+            Bitmap b = Bitmap.createBitmap(width, height,
+                    Bitmap.Config.ARGB_8888);
+            b.eraseColor(0xFFFFFFFF);
+            Canvas c = new Canvas(b);
+            Drawable d = getResources().getDrawable(mBitmapIds[index]);
 
-            try {
-                b = Glide.
-                        with(mContext).
-                        load(gifData.url).
-                        asBitmap().
-                        into(picConstantWidth, picConstantHeight). // Width and height
-                        get();
-                b.setWidth(picConstantWidth);
-                b.setHeight(picConstantHeight);
-//                Bitmap.Config config = b.getConfig();
-                Log.e("TAG","fuck");
-            } catch (Exception e) {
-                Log.e("TAG","fuck");
+            int margin = 7;
+            int border = 3;
+            Rect r = new Rect(margin, margin, width - margin, height - margin);
+
+            int imageWidth = r.width() - (border * 2);
+            int imageHeight = imageWidth * d.getIntrinsicHeight()
+                    / d.getIntrinsicWidth();
+            if (imageHeight > r.height() - (border * 2)) {
+                imageHeight = r.height() - (border * 2);
+                imageWidth = imageHeight * d.getIntrinsicWidth()
+                        / d.getIntrinsicHeight();
             }
+
+            r.left += ((r.width() - imageWidth) / 2) - border;
+            r.right = r.left + imageWidth + border + border;
+            r.top += ((r.height() - imageHeight) / 2) - border;
+            r.bottom = r.top + imageHeight + border + border;
+
+            Paint p = new Paint();
+            p.setColor(0xFFFF00FF);
+            c.drawRect(r, p);
+            r.left += border;
+            r.right -= border;
+            r.top += border;
+            r.bottom -= border;
+
+            d.setBounds(r);
+            d.draw(c);
+
+//            if (b != null) {
+//                return b;
+//            }
             return b;
         }
 
@@ -390,5 +440,17 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
                 mCurlView.setMargins(.0f, .00f, .0f, .00f);
             }
         }
+    }
+
+    public void onEvent(GridPhotoEvent event) {
+        String url = event.photoUrl;
+        Glide.with(mContext)
+                .load(url)
+                .asGif()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .placeholder(R.drawable.image_bg)
+                .centerCrop()
+                .crossFade()
+                .into(iv_last_cover);
     }
 }

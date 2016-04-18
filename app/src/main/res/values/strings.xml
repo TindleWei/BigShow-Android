@@ -11,4 +11,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <color name="line_gray">#C9CDC7</color>
+
+    <color name="text_gray_1">#B3B2B3</color>
+    <color name="text_gray_2">#535353</color>
+    <color name="line_gray_1">#E2E2E2</color>
+
 </resources>

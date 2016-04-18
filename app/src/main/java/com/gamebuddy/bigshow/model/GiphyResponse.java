@@ -1,15 +1,14 @@
 package com.gamebuddy.bigshow.model;
 
-import java.util.List;
-
 /**
  * describe
  * created by tindle
  * created time 16/3/14 下午3:29
  */
-public class GiphyResponse {
+public class GiphyResponse<T> {
 
-    public List<GiphyEntity> data;
+//    public List<GiphyEntity> data;
+    public T data;
     public Meta meta;
     public Pagination pagination;
 

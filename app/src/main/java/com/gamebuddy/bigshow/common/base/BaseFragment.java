@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gamebuddy.bigshow.view.view.LoadingView;
 import com.github.pwittchen.prefser.library.Prefser;
 
 import de.greenrobot.event.EventBus;
@@ -22,6 +23,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected Subscription mSubscription;
     protected Prefser prefser;
+    protected LoadingView loadingView;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -44,6 +46,13 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        loadingView = new LoadingView(getActivity());
+        loadingView.init();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unsubscribe();
@@ -53,10 +62,6 @@ public abstract class BaseFragment extends Fragment {
         if (mSubscription != null && !mSubscription.isUnsubscribed()){
             mSubscription.unsubscribe();
         }
-    }
-
-    protected String getTitle() {
-        return "";
     }
 
     /**
@@ -73,5 +78,13 @@ public abstract class BaseFragment extends Fragment {
     @SuppressWarnings("unchecked")
     public <T extends View> T $(View v, int id) {
         return (T) v.findViewById(id);
+    }
+
+    public void onEvent(Object object){
+
+    }
+
+    protected String getTitle() {
+        return "";
     }
 }

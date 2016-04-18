@@ -92,7 +92,6 @@ public class CurlRenderer implements GLSurfaceView.Renderer {
 
 	@Override
 	public synchronized void onDrawFrame(GL10 gl) {
-
 		mObserver.onDrawFrame();
 
 		gl.glClearColor(Color.red(mBackgroundColor) / 255f,
@@ -140,7 +139,7 @@ public class CurlRenderer implements GLSurfaceView.Renderer {
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		gl.glClearColor(0f, 0f, 0f, 1f);
+		gl.glClearColor(1f, 1f, 1f, 0f);
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 		gl.glHint(GL10.GL_LINE_SMOOTH_HINT, GL10.GL_NICEST);

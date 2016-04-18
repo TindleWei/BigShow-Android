@@ -6,6 +6,7 @@ import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.AVIMTypedMessage;
+import com.squareup.leakcanary.LeakCanary;
 
 /**
  * describe
@@ -29,6 +30,7 @@ public class App extends Application {
         super.onCreate();
 
         initLeanCloud();
+        LeakCanary.install(this);
     }
 
     public void initLeanCloud() {
