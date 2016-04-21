@@ -1,4 +1,4 @@
-package com.gamebuddy.bigshow.model;
+package com.gamebuddy.bigshow.model.network;
 
 /**
  * describe

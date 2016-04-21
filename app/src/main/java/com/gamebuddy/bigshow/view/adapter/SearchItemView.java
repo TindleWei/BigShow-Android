@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide;
 import com.gamebuddy.bigshow.R;
 import com.gamebuddy.bigshow.common.base.BaseAdapterItemView;
 import com.gamebuddy.bigshow.common.event.GridPhotoEvent;
-import com.gamebuddy.bigshow.model.GiphyEntity;
+import com.gamebuddy.bigshow.model.network.GiphyEntity;
 
 import butterknife.Bind;
 import de.greenrobot.event.EventBus;

@@ -1,4 +1,4 @@
-package com.gamebuddy.bigshow.model;
+package com.gamebuddy.bigshow.model.network;
 
 /**
  * describe
@@ -35,6 +35,5 @@ public class GiphyResponse<T> {
         int count;
         int offset;
     }
-
 
 }

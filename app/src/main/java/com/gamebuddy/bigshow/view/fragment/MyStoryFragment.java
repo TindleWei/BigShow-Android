@@ -19,8 +19,8 @@ import com.gamebuddy.bigshow.R;
 import com.gamebuddy.bigshow.common.base.BaseFragment;
 import com.gamebuddy.bigshow.common.event.TransitionEvent;
 import com.gamebuddy.bigshow.core.net.ApiManager;
-import com.gamebuddy.bigshow.model.GiphyEntity;
-import com.gamebuddy.bigshow.model.GiphyResponse;
+import com.gamebuddy.bigshow.model.network.GiphyEntity;
+import com.gamebuddy.bigshow.model.network.GiphyResponse;
 import com.gamebuddy.bigshow.presenter.intent.GifData;
 import com.gamebuddy.bigshow.view.activity.PlotMakerActivity;
 

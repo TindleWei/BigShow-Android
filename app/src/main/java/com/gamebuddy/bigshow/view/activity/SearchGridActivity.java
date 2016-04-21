@@ -8,7 +8,7 @@ import android.util.Log;
 import com.gamebuddy.bigshow.R;
 import com.gamebuddy.bigshow.common.base.BaseListActivity;
 import com.gamebuddy.bigshow.core.net.ApiManager;
-import com.gamebuddy.bigshow.model.GiphyEntity;
+import com.gamebuddy.bigshow.model.network.GiphyEntity;
 import com.gamebuddy.bigshow.view.adapter.SearchItemView;
 
 import java.util.HashMap;

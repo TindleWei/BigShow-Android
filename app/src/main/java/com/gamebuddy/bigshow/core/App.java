@@ -3,9 +3,12 @@ package com.gamebuddy.bigshow.core;
 import android.app.Application;
 
 import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.AVIMTypedMessage;
+import com.gamebuddy.bigshow.model.Plot;
+import com.gamebuddy.bigshow.model.Story;
 import com.squareup.leakcanary.LeakCanary;
 
 /**
@@ -38,9 +41,9 @@ public class App extends Application {
         AVOSCloud.initialize(this,
                 "ja8IkbhRpJTx7MbtvT3HEDX4-gzGzoHsz",
                 "fkIJXAcgdKeM1KJMwkfub3L4");
+        AVObject.registerSubclass(Story.class);
+        AVObject.registerSubclass(Plot.class);
 //        AVIMMessageManager.registerAVIMMessageType(AVIMOperationMessage.class);
-//        AVObject.registerSubclass(User.class);
-//        AVObject.registerSubclass(ChatMessage.class);
 //        AVObject.registerSubclass(AddRequest.class);
 //        AVObject.registerSubclass(GroupMessage.class);
 //        AVObject.registerSubclass(ChatGroup.class);

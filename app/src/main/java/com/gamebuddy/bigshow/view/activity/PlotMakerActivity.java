@@ -11,8 +11,10 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -31,7 +33,6 @@ import com.gamebuddy.bigshow.common.event.GridPhotoEvent;
 import com.gamebuddy.bigshow.presenter.intent.GifData;
 import com.gamebuddy.bigshow.view.vandor.curl.CurlPage;
 import com.gamebuddy.bigshow.view.vandor.curl.CurlView;
-import com.kogitune.activity_transition.ExitActivityTransition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,11 +93,8 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
 
     Bitmap b = null;
 
-    private ExitActivityTransition exitTransition;
-
-    public ExitActivityTransition getTransition() {
-        return exitTransition;
-    }
+    // 是否故事的第一话
+    boolean isStoryHead = false;
 
     @Override
     protected int getLayoutResId() {
@@ -140,8 +138,8 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
     }
 
     public void initData() {
-        layout_cardview.setAlpha(0);
-        layout_cardview.animate().setDuration(500).setStartDelay(500).alpha(1).start();
+//        layout_cardview.setAlpha(0);
+//        layout_cardview.animate().setDuration(500).setStartDelay(500).alpha(1).start();
 
         gifData = (GifData) getIntent().getSerializableExtra("data");
 
@@ -247,10 +245,13 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
             }
         });
 
-        tv_save.setOnClickListener(new View.OnClickListener(){
+        tv_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(mContext, PlotGridActivity.class);
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                        PlotMakerActivity.this, Pair.create(findViewById(R.id.layout_outer), "transition_element"));
+                ActivityCompat.startActivity(PlotMakerActivity.this, intent, options.toBundle());
             }
         });
     }
@@ -452,5 +453,8 @@ public class PlotMakerActivity extends BaseActivity implements ViewEventListener
                 .centerCrop()
                 .crossFade()
                 .into(iv_last_cover);
+
     }
+
+
 }

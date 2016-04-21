@@ -1,7 +1,7 @@
 package com.gamebuddy.bigshow.core.net;
 
-import com.gamebuddy.bigshow.model.GiphyEntity;
-import com.gamebuddy.bigshow.model.GiphyResponse;
+import com.gamebuddy.bigshow.model.network.GiphyEntity;
+import com.gamebuddy.bigshow.model.network.GiphyResponse;
 
 import java.util.List;
 import java.util.Map;

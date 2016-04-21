@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.kennyc.view.MultiStateView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.kennyc.view.MultiStateView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/multiStateView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,20 +9,25 @@
     app:msv_errorView="@layout/common_error"
     app:msv_loadingView="@layout/common_loading">
 
-    <com.cjj.MaterialRefreshLayout
-        android:id="@+id/refresh"
+    <com.gamebuddy.bigshow.view.view.PlotLinesView
+        android:id="@+id/view_plot_lines"
+        android:background="#666"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:wave_color="@android:color/black"
-        app:isLoadMore="true"
-        app:overlay="false"
-        app:wave_show="true">
+        android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/topic_item"/>
-    </com.cjj.MaterialRefreshLayout>
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </com.gamebuddy.bigshow.view.view.PlotLinesView>
+
 
 </com.kennyc.view.MultiStateView>
