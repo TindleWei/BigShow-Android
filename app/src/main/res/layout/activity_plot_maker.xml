@@ -39,7 +39,7 @@
                 android:padding="10dp">
 
 
-                <com.gamebuddy.bigshow.view.vandor.MyTextView
+                <com.wei.bigshow.ui.vandor.MyTextView
                     android:id="@+id/tv_plot_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
             android:layout_height="wrap_content">
 
 
-            <com.gamebuddy.bigshow.view.vandor.curl.CurlView
+            <com.wei.bigshow.ui.vandor.curl.CurlView
                 android:id="@+id/curl"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
