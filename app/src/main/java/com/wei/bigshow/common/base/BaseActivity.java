@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.github.pwittchen.prefser.library.Prefser;
 
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 import rx.Subscription;
 import rx.subscriptions.Subscriptions;
 
@@ -35,7 +34,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         prefser = new Prefser(this);
         mSubscription = Subscriptions.empty();
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
     }
 
     protected void unsubscribe() {

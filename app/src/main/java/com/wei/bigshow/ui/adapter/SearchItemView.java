@@ -10,11 +10,9 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseAdapterItemView;
-import com.wei.bigshow.common.event.GridPhotoEvent;
 import com.wei.bigshow.model.network.GiphyEntity;
 
 import butterknife.Bind;
-import de.greenrobot.event.EventBus;
 
 /**
  * describe
@@ -76,7 +74,6 @@ public class SearchItemView extends BaseAdapterItemView<GiphyEntity>{
 
                 //封装数据
                 String saveUrl = item.images.fixed_width.url;
-                EventBus.getDefault().post(new GridPhotoEvent(saveUrl));
                 ((Activity)getContext()).finish();
             }
         });

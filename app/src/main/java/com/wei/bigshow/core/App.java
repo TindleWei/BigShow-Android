@@ -9,7 +9,6 @@ import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 import com.wei.bigshow.model.Plot;
 import com.wei.bigshow.model.Story;
-import com.squareup.leakcanary.LeakCanary;
 
 /**
  * describe
@@ -33,7 +32,6 @@ public class App extends Application {
         super.onCreate();
 
         initLeanCloud();
-        LeakCanary.install(this);
     }
 
     public void initLeanCloud() {

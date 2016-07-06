@@ -70,7 +70,7 @@ def getDate() {
     return formattedDate
 }
 
-def SUPPORT_VERSION = "23.0.+"
+def SUPPORT_VERSION = "23.4.+"
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // Basic
@@ -81,47 +81,38 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:' + SUPPORT_VERSION
     compile 'com.android.support:design:' + SUPPORT_VERSION
     compile 'com.android.support:multidex:1.0.1'
-    // LeakCanary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
-    //Butterknife
-    compile 'com.jakewharton:butterknife:7.0.1'
-    //compile 'com.jakewharton:butterknife:7.0.1'
-    //Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
-    compile 'com.google.code.gson:gson:2.4'
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
-    // Network
-    // compile 'com.squareup.okhttp3:okhttp:3.1.2'
-    // ReactiveX
-    compile 'io.reactivex:rxandroid:1.0.1'
-    compile 'io.reactivex:rxjava:1.0.14'
-    // Component For RxJava
-    compile 'com.github.pwittchen:prefser:2.0.1'
-    // Component For View
-    compile 'com.kennyc:multistateview:1.1'
+
+    //Frame View
     compile 'io.nlopez.smartadapters:library:1.3.0'
-    compile 'com.ogaclejapan.smarttablayout:library:1.6.0@aar'
-    compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.0@aar'
-    compile 'com.cjj.materialrefeshlayout:library:1.3.0'
-    compile 'com.zhy:percent-support-extends:1.0.6'
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    // Dependency Injection
+    compile 'com.jakewharton:butterknife:7.0.1'
+    // ReactiveX
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'io.reactivex:rxjava:1.0.14'
+    // GSON
+    compile 'com.google.code.gson:gson:2.4'
+    // Component For RxJava
+    compile 'com.github.pwittchen:prefser:2.0.5'
+    // Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     // Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'jp.wasabeef:glide-transformations:1.3.1'
-    // Android-ObservableScrollView
-    compile 'com.github.ksoichiro:android-observablescrollview:1.6.0'
-    compile 'com.nineoldandroids:library:2.4.0'
-    // Event Bus
-    compile 'de.greenrobot:eventbus:2.4.0'
     // Soft Keyboard Listener
     compile 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:1.0.0'
-    // Material Drawer
-    compile('com.mikepenz:materialdrawer:4.6.4@aar') {
-        transitive = true
-    }
+
+    compile 'com.kennyc:multistateview:1.1'
+    compile 'com.ogaclejapan.smarttablayout:library:1.6.0@aar'
+    compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.0@aar'
+
+    //Retrofit
+//    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+//    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+//    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
+//    compile 'com.google.code.gson:gson:2.4'
+//    compile 'com.squareup.okhttp:okhttp:2.4.0'
+
 
     // Lean Cloud
     //avoscloud-sdk 为 LeanCloud基础包
@@ -130,6 +121,4 @@ dependencies {
     compile ('cn.leancloud.android:avoscloud-push:v3.+@aar'){transitive = true}
     //avoscloud-statistics 为 LeanCloud 统计包
     compile ('cn.leancloud.android:avoscloud-statistics:v3.+')
-    // pre-lollipop transition
-    compile 'com.kogitune:pre-lollipop-activity-transition:1.3.0'
 }

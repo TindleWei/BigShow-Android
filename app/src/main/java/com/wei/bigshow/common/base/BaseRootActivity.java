@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -18,28 +17,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.wei.bigshow.R;
 import com.github.pwittchen.prefser.library.Prefser;
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.holder.BadgeStyle;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
+import com.wei.bigshow.R;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 
 /**
  * 导航栏基类,包含底部导航或顶部导航
@@ -85,7 +72,6 @@ public abstract class BaseRootActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        EventBus.getDefault().register(this);
         initToolbar();
     }
 
@@ -137,46 +123,6 @@ public abstract class BaseRootActivity extends AppCompatActivity {
     public void initBottomTabs(final List<HomeTabEntity> tabs) {
         initTabs(tabs);
 
-    }
-
-    /**
-     * 初始化MaterialDrawer
-     *
-     * @see <a href="https://github.com/mikepenz/MaterialDrawer"/>
-     */
-    public void initDrawer() {
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("drawer_item_home").withBadge("19").withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700));
-        SecondaryDrawerItem item2 = new SecondaryDrawerItem().withName("drawer_item_settings");
-        AccountHeader headerResult = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withHeaderBackground(R.drawable.material_drawer_badge)
-                .addProfiles(
-                        new ProfileDrawerItem().withName("Mike Penz").withEmail("mikepenz@gmail.com").withIcon(getResources().getDrawable(R.drawable.material_drawer_shadow_top))
-                )
-                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-                    @Override
-                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
-                        return false;
-                    }
-                })
-                .build();
-        Drawer result = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(toolbar) //show left menu view
-                .withAccountHeader(headerResult)
-                .addDrawerItems(
-                        item1,
-                        new DividerDrawerItem(),
-                        item2,
-                        new SecondaryDrawerItem().withName("drawer_item_settings")
-                )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        return true;
-                    }
-                })
-                .build();
     }
 
     /**

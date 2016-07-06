@@ -7,10 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wei.bigshow.ui.view.LoadingView;
 import com.github.pwittchen.prefser.library.Prefser;
+import com.wei.bigshow.ui.view.LoadingView;
 
-import de.greenrobot.event.EventBus;
 import rx.Subscription;
 import rx.subscriptions.Subscriptions;
 
@@ -30,7 +29,6 @@ public abstract class BaseFragment extends Fragment {
         super.onCreate(bundle);
         prefser = new Prefser(getContext());
         mSubscription = Subscriptions.empty();
-        EventBus.getDefault().register(this);
     }
 
     @Nullable
@@ -42,7 +40,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //ButterKnife.bind(this, view);
+//        ButterKnife.bind(this, view);
     }
 
     @Override
@@ -55,6 +53,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+//        ButterKnife.unbind(this);
         unsubscribe();
     }
 
