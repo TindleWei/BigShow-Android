@@ -34,4 +34,8 @@
     <color name="white_alpha">#88ffffff</color>
     <color name="header_bg">#090D27</color>
 
+    <color name="grey">#BEBEBE</color>
+    <color name="twitter">#23C4FF</color>
+
+
 </resources>

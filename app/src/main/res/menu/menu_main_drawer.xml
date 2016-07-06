@@ -1,0 +1,32 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_tab_1"
+            android:title="Home"/>
+        <item
+            android:id="@+id/nav_messages"
+            android:icon="@drawable/ic_tab_1"
+            android:title="Messages"/>
+        <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/ic_tab_1"
+            android:title="Friends"/>
+        <item
+            android:id="@+id/nav_discussion"
+            android:icon="@drawable/ic_tab_1"
+            android:title="Discussion"/>
+    </group>
+
+    <item android:title="What's More">
+        <menu>
+            <item
+                android:icon="@drawable/ic_tab_2"
+                android:title="Settings"/>
+            <item
+                android:icon="@drawable/ic_tab_2"
+                android:title="Login"/>
+        </menu>
+    </item>
+</menu>
