@@ -2,6 +2,8 @@ package com.wei.bigshow.ui.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.wei.bigshow.R;
+import com.wei.bigshow.ui.fragment.CardRevealFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,10 +31,24 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_tab_1);
+        ab.setHomeAsUpIndicator(R.mipmap.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
 
         setupDrawerContent(mNavigationView);
+
+        initView();
+    }
+
+    public void initView(){
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.findFragmentByTag("CardRevealFragment") == null) {
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.add(R.id.layout_container, CardRevealFragment.instance(), "CardRevealFragment")
+                    .commit();
+        }else{
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.show(fm.findFragmentByTag("CardRevealFragment"));
+        }
     }
 
     private void setupDrawerContent(NavigationView navigationView)

@@ -31,6 +31,11 @@ public class CardRevealFragment extends Fragment{
     float pixelDensity;
     boolean flag = true;
 
+    public static CardRevealFragment instance() {
+        CardRevealFragment fragment = new CardRevealFragment();
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
