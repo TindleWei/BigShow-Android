@@ -30,7 +30,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseActivity;
 import com.wei.bigshow.common.event.GridPhotoEvent;
-import com.wei.bigshow.presenter.intent.GifData;
+import com.wei.bigshow.model.GifData;
 import com.wei.bigshow.ui.vandor.curl.CurlPage;
 import com.wei.bigshow.ui.vandor.curl.CurlView;
 

@@ -1,4 +1,4 @@
-package com.wei.bigshow.presenter.intent;
+package com.wei.bigshow.model;
 
 import java.io.Serializable;
 

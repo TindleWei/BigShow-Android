@@ -21,7 +21,7 @@ import com.wei.bigshow.common.event.TransitionEvent;
 import com.wei.bigshow.core.net.ApiManager;
 import com.wei.bigshow.model.network.GiphyEntity;
 import com.wei.bigshow.model.network.GiphyResponse;
-import com.wei.bigshow.presenter.intent.GifData;
+import com.wei.bigshow.model.GifData;
 import com.wei.bigshow.ui.activity.PlotMakerActivity;
 
 import java.io.IOException;
