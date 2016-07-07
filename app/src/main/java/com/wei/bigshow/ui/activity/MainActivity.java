@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -15,7 +14,9 @@ import android.widget.RelativeLayout;
 
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseActivity;
+import com.wei.bigshow.common.base.BaseFragment;
 import com.wei.bigshow.ui.fragment.CardRevealFragment;
+import com.wei.bigshow.ui.fragment.MyStoryFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,6 +35,12 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.layout_container)
     RelativeLayout layoutContainer;
 
+    /**
+     * Bundle key representing the Active Fragment
+     */
+    private static final String STATE_ACTIVE_FRAGMENT = "active_fragment";
+    private BaseFragment mFragment;
+
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_main;
@@ -47,6 +54,18 @@ public class MainActivity extends BaseActivity {
 
         initToolbar();
         initView();
+        initFragment(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        getSupportFragmentManager().putFragment(outState, STATE_ACTIVE_FRAGMENT, mFragment);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     public void initToolbar() {
@@ -58,17 +77,29 @@ public class MainActivity extends BaseActivity {
     }
 
     public void initView() {
-        setupDrawerContent(mNavigationView);
+        setupDrawerMenu();
 
-        FragmentManager fm = getSupportFragmentManager();
-        if (fm.findFragmentByTag("CardRevealFragment") == null) {
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.add(R.id.layout_container, CardRevealFragment.instance(), "CardRevealFragment")
-                    .commit();
-        } else {
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.show(fm.findFragmentByTag("CardRevealFragment"));
+//        FragmentManager fm = getSupportFragmentManager();
+//        if (fm.findFragmentByTag("CardRevealFragment") == null) {
+//            FragmentTransaction ft = fm.beginTransaction();
+//            ft.add(R.id.layout_container, CardRevealFragment.instance(), "CardRevealFragment")
+//                    .commit();
+//        } else {
+//            FragmentTransaction ft = fm.beginTransaction();
+//            ft.show(fm.findFragmentByTag("CardRevealFragment"));
+//        }
+    }
+
+    public void initFragment(Bundle bundle){
+        if (bundle != null) {
+            mFragment = (BaseFragment)getSupportFragmentManager().getFragment(bundle, STATE_ACTIVE_FRAGMENT);
         }
+        if (mFragment == null) {
+            mFragment = CardRevealFragment.instance();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.layout_container,
+                mFragment).commit();
     }
 
 
@@ -93,15 +124,31 @@ public class MainActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-
+    private void setupDrawerMenu() {
+        mNavigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
-
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
+                        switch (menuItem.getItemId()){
+                            case R.id.nav_home:
+                                mFragment = new CardRevealFragment();
+                                FragmentManager fragmentManager2 = getSupportFragmentManager();
+                                fragmentManager2.beginTransaction().replace(R.id.layout_container, mFragment).commit();
+                                break;
+                            case R.id.nav_messages:
+                                mFragment = new MyStoryFragment();
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                fragmentManager.beginTransaction().replace(R.id.layout_container, mFragment).commit();
+                                break;
+                            case R.id.nav_friends:
+
+                                break;
+                            case R.id.nav_discussion:
+
+                                break;
+                        }
                         return true;
                     }
                 });

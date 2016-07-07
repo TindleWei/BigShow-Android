@@ -2,7 +2,6 @@ package com.wei.bigshow.ui.fragment;
 
 import android.animation.Animator;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +15,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.wei.bigshow.R;
+import com.wei.bigshow.common.base.BaseFragment;
 
 /**
  * describe
  * created by tindle
  * created time 16/7/6 下午5:32
  */
-public class CardRevealFragment extends Fragment{
+public class CardRevealFragment extends BaseFragment{
 
     ImageView imageView;
     ImageButton imageButton;
