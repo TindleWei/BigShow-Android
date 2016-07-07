@@ -3,7 +3,9 @@ package com.wei.bigshow.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -14,7 +16,6 @@ import android.widget.RelativeLayout;
 
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseActivity;
-import com.wei.bigshow.common.base.BaseFragment;
 import com.wei.bigshow.ui.fragment.CardRevealFragment;
 import com.wei.bigshow.ui.fragment.MyStoryFragment;
 
@@ -39,7 +40,9 @@ public class MainActivity extends BaseActivity {
      * Bundle key representing the Active Fragment
      */
     private static final String STATE_ACTIVE_FRAGMENT = "active_fragment";
-    private BaseFragment mFragment;
+    private Fragment mFragment;
+    private Fragment currentFragment;
+    private FragmentManager fragmentManager;
 
     @Override
     protected int getLayoutResId() {
@@ -92,14 +95,31 @@ public class MainActivity extends BaseActivity {
 
     public void initFragment(Bundle bundle){
         if (bundle != null) {
-            mFragment = (BaseFragment)getSupportFragmentManager().getFragment(bundle, STATE_ACTIVE_FRAGMENT);
+            mFragment = getSupportFragmentManager().getFragment(bundle, STATE_ACTIVE_FRAGMENT);
         }
         if (mFragment == null) {
             mFragment = CardRevealFragment.instance();
         }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.layout_container,
-                mFragment).commit();
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.layout_container,
+                mFragment, mFragment.getClass().getSimpleName()).commit();
+        currentFragment = mFragment;
+
+    }
+
+    public void changeFragment(Fragment fragment){
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        Fragment tempFragment = fragmentManager.findFragmentByTag(fragment.getClass().getSimpleName());
+        String name = fragment.getClass().getSimpleName();
+        if (tempFragment==null || !tempFragment.isAdded()) {
+            ft.hide(currentFragment).add(R.id.layout_container, fragment, fragment.getClass().getSimpleName()).commit();
+            String name2 = fragment.getClass().getSimpleName();
+            currentFragment = fragment;
+        } else {
+            ft.hide(currentFragment).show(tempFragment).commit();
+            currentFragment = tempFragment;
+            fragment = null;
+        }
     }
 
 
@@ -133,14 +153,10 @@ public class MainActivity extends BaseActivity {
                         mDrawerLayout.closeDrawers();
                         switch (menuItem.getItemId()){
                             case R.id.nav_home:
-                                mFragment = new CardRevealFragment();
-                                FragmentManager fragmentManager2 = getSupportFragmentManager();
-                                fragmentManager2.beginTransaction().replace(R.id.layout_container, mFragment).commit();
+                                changeFragment(CardRevealFragment.instance());
                                 break;
                             case R.id.nav_messages:
-                                mFragment = new MyStoryFragment();
-                                FragmentManager fragmentManager = getSupportFragmentManager();
-                                fragmentManager.beginTransaction().replace(R.id.layout_container, mFragment).commit();
+                                changeFragment(MyStoryFragment.instance());
                                 break;
                             case R.id.nav_friends:
 

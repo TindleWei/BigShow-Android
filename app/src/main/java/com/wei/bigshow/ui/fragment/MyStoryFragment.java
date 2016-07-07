@@ -65,6 +65,11 @@ public class MyStoryFragment extends BaseFragment {
 
     GifData intentData = null;
 
+    public static MyStoryFragment instance() {
+        MyStoryFragment fragment = new MyStoryFragment();
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
