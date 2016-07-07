@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseActivity;
 import com.wei.bigshow.ui.fragment.CardRevealFragment;
+import com.wei.bigshow.ui.fragment.GiphyListFragment;
 import com.wei.bigshow.ui.fragment.MyStoryFragment;
 
 import butterknife.Bind;
@@ -159,7 +160,7 @@ public class MainActivity extends BaseActivity {
                                 changeFragment(MyStoryFragment.instance());
                                 break;
                             case R.id.nav_friends:
-
+                                changeFragment(GiphyListFragment.instance());
                                 break;
                             case R.id.nav_discussion:
 

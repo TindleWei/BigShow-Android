@@ -102,7 +102,6 @@ dependencies {
     // Soft Keyboard Listener
     compile 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:1.0.0'
 
-    compile 'com.kennyc:multistateview:1.1'
     compile 'com.ogaclejapan.smarttablayout:library:1.6.0@aar'
     compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.0@aar'
 
