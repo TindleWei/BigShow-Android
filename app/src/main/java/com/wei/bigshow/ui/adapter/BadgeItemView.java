@@ -47,26 +47,40 @@ public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
     public void bind(GiphyEntity item, int position) {
         super.bind(item, position);
 
+        String url_width_gif = item.images.fixed_width.url;
+        String url_height_gif = item.images.fixed_height_small.url;
+        String url_still_width = item.images.fixed_width_still.url;
+        String url_still_height = item.images.fixed_height_still.url;
+
         int width = Integer.valueOf(item.images.fixed_width.width);
         int height = Integer.valueOf(item.images.fixed_width.height);
-//        if(position%3==0){
-//            imageView.getLayoutParams().height = mScreenWidth * height / width;
-//        }else{
-//            imageView.getLayoutParams().height = (int)(mScreenWidth * 0.5 * height / width);
-//        }
+
+        if (position % 3 == 0) {
+
+//            imageView.getLayoutParams().height = (int) (mScreenWidth * 1.0 * height / width);
+
+            Glide.with(getContext())
+                    .load(url_width_gif)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .placeholder(R.drawable.image_bg)
+                    .dontAnimate()
+                    .into(imageView);
+        } else {
+
+//            imageView.getLayoutParams().height = (int) (mScreenWidth * 1.0 * height / width);
+
+            Glide.with(getContext())
+                    .load(url_height_gif)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .placeholder(R.drawable.image_bg)
+                    .dontAnimate()
+                    .into(imageView);
+        }
     }
 
     @Override
     public void bind(final GiphyEntity item) {
 
-        String url_gif = item.images.fixed_width.url;
-        String url_still = item.images.fixed_width_still.url;
 
-        Glide.with(getContext())
-                .load(url_gif)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .placeholder(R.drawable.image_bg)
-                .dontAnimate()
-                .into(imageView);
     }
 }
