@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity {
         initToolbar();
         initView();
         initFragment(savedInstanceState);
+
     }
 
     @Override

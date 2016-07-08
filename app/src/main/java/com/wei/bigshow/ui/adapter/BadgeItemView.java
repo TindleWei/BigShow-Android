@@ -57,7 +57,7 @@ public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
 
         if (position % 3 == 0) {
 
-//            imageView.getLayoutParams().height = (int) (mScreenWidth * 1.0 * height / width);
+            imageView.getLayoutParams().height = (int) (mScreenWidth * 0.51);
 
             Glide.with(getContext())
                     .load(url_width_gif)
@@ -67,7 +67,7 @@ public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
                     .into(imageView);
         } else {
 
-//            imageView.getLayoutParams().height = (int) (mScreenWidth * 1.0 * height / width);
+            imageView.getLayoutParams().height = (int) (mScreenWidth * 0.51);
 
             Glide.with(getContext())
                     .load(url_height_gif)
