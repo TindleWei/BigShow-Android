@@ -1,33 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.kennyc.view.MultiStateView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.wei.bigshow.ui.view.PlotLinesView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/multiStateView"
+    android:id="@+id/view_plot_lines"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:msv_emptyView="@layout/common_empty"
-    app:msv_errorView="@layout/common_error"
-    app:msv_loadingView="@layout/common_loading">
+    android:layout_height="wrap_content"
+    android:background="#666"
+    android:orientation="vertical">
 
-    <com.wei.bigshow.ui.view.PlotLinesView
-        android:id="@+id/view_plot_lines"
-        android:background="#666"
-        android:orientation="vertical"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh_layout"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </android.support.v4.widget.SwipeRefreshLayout>
+</com.wei.bigshow.ui.view.PlotLinesView>
 
-    </com.wei.bigshow.ui.view.PlotLinesView>
-
-
-</com.kennyc.view.MultiStateView>

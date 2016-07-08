@@ -4,20 +4,32 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 
 import com.wei.bigshow.common.base.BaseRecyclerFragment;
+import com.wei.bigshow.core.net.ApiManager;
 import com.wei.bigshow.model.BadgeItem;
+import com.wei.bigshow.model.network.GiphyEntity;
+import com.wei.bigshow.model.network.GiphyResponse;
 import com.wei.bigshow.model.view.LoadViewEntity;
 import com.wei.bigshow.ui.adapter.BadgeItemView;
 import com.wei.bigshow.ui.adapter.LoadMoreView;
 import com.wei.bigshow.ui.vandor.MultiStateView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.nlopez.smartadapters.SmartAdapter;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class GiphyListFragment extends BaseRecyclerFragment {
+
+    public static final String TAG = GiphyListFragment.class.getSimpleName();
 
     public static GiphyListFragment instance() {
         GiphyListFragment fragment = new GiphyListFragment();
@@ -37,7 +49,7 @@ public class GiphyListFragment extends BaseRecyclerFragment {
         GridLayoutManager layoutManager = createGridLayoutManager(2);
         recyclerView.setLayoutManager(layoutManager);
         adapter = SmartAdapter.empty()
-                .map(BadgeItem.class, BadgeItemView.class)
+                .map(GiphyEntity.class, BadgeItemView.class)
                 .map(LoadViewEntity.class, LoadMoreView.class)
                 .into(recyclerView);
         swipeRefreshLayout.setEnabled(true);
@@ -85,7 +97,51 @@ public class GiphyListFragment extends BaseRecyclerFragment {
     }
 
     private void fetchData(final boolean isLoadMore) {
-        testData(null);
+
+        Subscriber mSubscriber = new Subscriber<GiphyResponse<List<GiphyEntity>>>() {
+            @Override
+            public void onCompleted() {
+                Log.e(TAG, "on Completed !");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "on Error !");
+            }
+
+            @Override
+            public void onNext(GiphyResponse<List<GiphyEntity>> giphyResponse) {
+                Log.e(TAG, "on Next !");
+                try {
+                    if (giphyResponse.data.size() == 0) {
+                        Log.e(TAG, "on size 0 !");
+                        return;
+                    }
+                    List<GiphyEntity> list = giphyResponse.data;
+                    itemList = list;
+                    resetDataLoadLayout();
+                    adapter.setItems(itemList);
+                    multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
+
+                } catch (Exception e) {
+                }
+            }
+        };
+
+        Map<String, String> map = new HashMap<>();
+        map.put("rating", "g");
+        map.put("limit", "20");
+
+        mSubscription =  ApiManager.getInstance().apiService.getTrendingData(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                })
+                .subscribe(mSubscriber);
 
     }
 

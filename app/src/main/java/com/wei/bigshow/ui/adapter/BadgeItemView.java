@@ -1,11 +1,15 @@
 package com.wei.bigshow.ui.adapter;
 
 import android.content.Context;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseAdapterItemView;
-import com.wei.bigshow.model.BadgeItem;
+import com.wei.bigshow.model.network.GiphyEntity;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -13,8 +17,11 @@ import butterknife.ButterKnife;
  * created by weizepeng
  * created time 16/6/30 下午5:45
  */
-public class BadgeItemView extends BaseAdapterItemView<BadgeItem> {
+public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
 
+
+    @Bind(R.id.imageView)
+    ImageView imageView;
 
     public BadgeItemView(Context context) {
         super(context);
@@ -37,13 +44,29 @@ public class BadgeItemView extends BaseAdapterItemView<BadgeItem> {
      * bind(item, position) 在bind(item）之前发生
      */
     @Override
-    public void bind(BadgeItem item, int position) {
+    public void bind(GiphyEntity item, int position) {
         super.bind(item, position);
+
+        int width = Integer.valueOf(item.images.fixed_width.width);
+        int height = Integer.valueOf(item.images.fixed_width.height);
+//        if(position%3==0){
+//            imageView.getLayoutParams().height = mScreenWidth * height / width;
+//        }else{
+//            imageView.getLayoutParams().height = (int)(mScreenWidth * 0.5 * height / width);
+//        }
     }
 
     @Override
-    public void bind(final BadgeItem item) {
+    public void bind(final GiphyEntity item) {
 
+        String url_gif = item.images.fixed_width.url;
+        String url_still = item.images.fixed_width_still.url;
 
+        Glide.with(getContext())
+                .load(url_gif)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .placeholder(R.drawable.image_bg)
+                .dontAnimate()
+                .into(imageView);
     }
 }
