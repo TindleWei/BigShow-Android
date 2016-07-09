@@ -1,6 +1,8 @@
 package com.wei.bigshow.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -8,6 +10,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseAdapterItemView;
 import com.wei.bigshow.model.network.GiphyEntity;
+import com.wei.bigshow.ui.activity.SimpleActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -80,7 +83,14 @@ public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
 
     @Override
     public void bind(final GiphyEntity item) {
+        this.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
 
+
+                v.getContext().startActivity(new Intent(v.getContext(), SimpleActivity.class));
+            }
+        });
 
     }
 }

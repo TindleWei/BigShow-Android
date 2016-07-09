@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
         <item name="android:colorPrimary">@color/colorPrimary</item>
@@ -21,4 +22,32 @@
         <item name="android:minWidth">@dimen/dimen_0dp</item>
 
     </style>
+
+    <style name="CardText">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">@dimen/dimen_16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:padding">@dimen/dimen_8dp</item>
+
+
+    </style>
+
+    <style name="ItalicText">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:lineSpacingExtra">@dimen/dimen_4dp</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">@dimen/dimen_16sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:padding">@dimen/dimen_8dp</item>
+
+    </style>
+
+
 </resources>

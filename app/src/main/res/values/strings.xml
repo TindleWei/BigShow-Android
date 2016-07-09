@@ -27,4 +27,6 @@
     <string name="schedule">SCHEDULE</string>
     <string name="delete">DELETE</string>
 
+    <string name="header_guide">Guide</string>
+
 </resources>

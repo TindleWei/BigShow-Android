@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.wei.bigshow.common.base.BaseRecyclerFragment;
-import com.wei.bigshow.model.network.GiphyEntity;
-import com.wei.bigshow.model.view.LoadViewEntity;
-import com.wei.bigshow.ui.adapter.BadgeItemView;
-import com.wei.bigshow.ui.adapter.LoadMoreView;
+import com.wei.bigshow.model.story.PlotMeta;
+import com.wei.bigshow.model.story.PlotOptions;
+import com.wei.bigshow.model.zeus.GuideHeaderItem;
+import com.wei.bigshow.ui.adapter.zeus.GuideHeaderView;
+import com.wei.bigshow.ui.adapter.zeus.PlotMetaView;
+import com.wei.bigshow.ui.adapter.zeus.PlotOptionsView;
 
 import java.util.ArrayList;
 
@@ -37,16 +39,23 @@ public class ZeusFragment extends BaseRecyclerFragment{
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         adapter = SmartAdapter.empty()
-                .map(GiphyEntity.class, BadgeItemView.class)
-                .map(LoadViewEntity.class, LoadMoreView.class)
+                .map(GuideHeaderItem.class, GuideHeaderView.class)
+                .map(PlotMeta.class, PlotMetaView.class)
+                .map(PlotOptions.class, PlotOptionsView.class)
                 .into(recyclerView);
-        swipeRefreshLayout.setEnabled(true);
-        initRefreshLayout();
-        initLoadMoreLayout(layoutManager);
+        swipeRefreshLayout.setEnabled(false);
     }
 
     private void initData() {
         itemList = new ArrayList<>();
+        itemList.add(new GuideHeaderItem());
+        itemList.add(new PlotMeta());
+        itemList.add(new PlotOptions());
+        itemList.add(new PlotMeta());
+        itemList.add(new PlotOptions());
+        itemList.add(new PlotMeta());
+        itemList.add(new PlotOptions());
+        adapter.setItems(itemList);
     }
 
 

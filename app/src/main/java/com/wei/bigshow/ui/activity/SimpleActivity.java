@@ -34,12 +34,10 @@ public class SimpleActivity extends BaseActivity{
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
-        if(bundle.getString(FRAGMENT_TYPE).equals(Zeus)){
+//        if(bundle.getString(FRAGMENT_TYPE).equals(Zeus)){
             ft.add(R.id.layout_container, ZeusFragment.instance(bundle), TAG)
                     .commit();
-        }
-
-
+//        }
 
     }
 }

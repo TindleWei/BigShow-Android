@@ -60,6 +60,9 @@
         <activity
             android:name="com.wei.bigshow.ui.activity.SearchGridActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.activity.SimpleActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
