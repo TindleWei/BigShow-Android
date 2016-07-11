@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.ButterKnife;
 import io.nlopez.smartadapters.SmartAdapter;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -65,9 +66,9 @@ public class GiphyListFragment extends BaseRecyclerFragment {
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if(position%3==0){
+                if (position % 3 == 0) {
                     return 2;
-                }else{
+                } else {
                     return 1;
                 }
             }
@@ -132,7 +133,7 @@ public class GiphyListFragment extends BaseRecyclerFragment {
         map.put("rating", "g");
         map.put("limit", "20");
 
-        mSubscription =  ApiManager.getInstance().apiService.getTrendingData(map)
+        mSubscription = ApiManager.getInstance().apiService.getTrendingData(map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(new Action1<Throwable>() {
@@ -162,6 +163,12 @@ public class GiphyListFragment extends BaseRecyclerFragment {
 
     private void parseData(String data) {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     public interface HandlerMsg {

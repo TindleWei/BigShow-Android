@@ -1,15 +1,20 @@
 package com.wei.bigshow.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseRecyclerFragment;
-import com.wei.bigshow.model.network.GiphyEntity;
 import com.wei.bigshow.model.story.PlotMeta;
-import com.wei.bigshow.model.story.PlotOptions;
 import com.wei.bigshow.model.view.LoadViewEntity;
-import com.wei.bigshow.model.zeus.GuideHeaderItem;
-import com.wei.bigshow.ui.adapter.BadgeItemView;
 import com.wei.bigshow.ui.adapter.LoadMoreView;
 import com.wei.bigshow.ui.adapter.zeus.PlotMetaView;
 
@@ -29,19 +34,48 @@ public class GiphySearchFragment extends BaseRecyclerFragment{
         return fragment;
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.common_list_normal, container, false);
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+
         initView();
         initData();
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_endless, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+//        mListener.onInitSearchView(menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+
+        MenuItem gridMenuItem = menu.findItem(R.id.action_list_type);
+        if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
+            gridMenuItem.setIcon(R.mipmap.ic_action_search);
+            gridMenuItem.setTitle("fuck1");
+        } else {
+            gridMenuItem.setIcon(R.mipmap.ic_action_search);
+            gridMenuItem.setTitle("fuck2");
+        }
+    }
+
 
     private void initView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         adapter = SmartAdapter.empty()
                 .map(PlotMeta.class, PlotMetaView.class)
-                .map(GiphyEntity.class, BadgeItemView.class)
                 .map(LoadViewEntity.class, LoadMoreView.class)
                 .into(recyclerView);
         swipeRefreshLayout.setEnabled(true);
@@ -51,16 +85,11 @@ public class GiphySearchFragment extends BaseRecyclerFragment{
 
     private void initData() {
         itemList = new ArrayList<>();
-        itemList.add(new GuideHeaderItem());
         itemList.add(new PlotMeta());
-        itemList.add(new PlotOptions());
         itemList.add(new PlotMeta());
-        itemList.add(new PlotOptions());
         itemList.add(new PlotMeta());
-        itemList.add(new PlotOptions());
         adapter.setItems(itemList);
     }
-
 
     @Override
     protected void onMoreData() {

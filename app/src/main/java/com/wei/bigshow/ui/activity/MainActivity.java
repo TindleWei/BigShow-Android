@@ -142,7 +142,6 @@ public class MainActivity extends BaseActivity {
                 startActivity(new Intent(mContext, PlotGridActivity.class));
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
