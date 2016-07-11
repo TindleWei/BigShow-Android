@@ -1,10 +1,13 @@
 package com.wei.bigshow.ui.adapter.zeus;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
 
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseAdapterItemView;
 import com.wei.bigshow.model.story.PlotMeta;
+import com.wei.bigshow.ui.activity.SimpleActivity;
 
 import butterknife.ButterKnife;
 
@@ -43,6 +46,13 @@ public class PlotMetaView extends BaseAdapterItemView<PlotMeta> {
     @Override
     public void bind(final PlotMeta item) {
 
-
+        this.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString(SimpleActivity.FRAGMENT_TYPE, SimpleActivity.GIPHY_SEARCH);
+                SimpleActivity.start(v.getContext(), bundle);
+            }
+        });
     }
 }

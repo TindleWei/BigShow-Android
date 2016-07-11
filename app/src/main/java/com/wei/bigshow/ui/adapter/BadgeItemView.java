@@ -1,7 +1,7 @@
 package com.wei.bigshow.ui.adapter;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -86,9 +86,9 @@ public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
         this.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
-
-                v.getContext().startActivity(new Intent(v.getContext(), SimpleActivity.class));
+                Bundle bundle = new Bundle();
+                bundle.putString(SimpleActivity.FRAGMENT_TYPE, SimpleActivity.ZEUS);
+                SimpleActivity.start(v.getContext(), bundle);
             }
         });
 
