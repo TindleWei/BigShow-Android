@@ -45,21 +45,19 @@ public class GiphySearchFragment extends BaseRecyclerFragment{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
         initView();
         initData();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_endless, menu);
+        inflater.inflate(R.menu.menu_giphy_search, menu);
         super.onCreateOptionsMenu(menu, inflater);
 //        mListener.onInitSearchView(menu);
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-
         MenuItem gridMenuItem = menu.findItem(R.id.action_list_type);
         if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
             gridMenuItem.setIcon(R.mipmap.ic_action_search);
