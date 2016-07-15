@@ -58,7 +58,7 @@ public class GiphySearchFragment extends BaseRecyclerFragment{
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem gridMenuItem = menu.findItem(R.id.action_list_type);
+        MenuItem gridMenuItem = menu.findItem(R.id.action_search);
         if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
             gridMenuItem.setIcon(R.mipmap.ic_action_search);
             gridMenuItem.setTitle("fuck1");

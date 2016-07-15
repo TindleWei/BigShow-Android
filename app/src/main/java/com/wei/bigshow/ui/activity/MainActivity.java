@@ -18,7 +18,6 @@ import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseActivity;
 import com.wei.bigshow.ui.fragment.CardRevealFragment;
 import com.wei.bigshow.ui.fragment.GiphyListFragment;
-import com.wei.bigshow.ui.fragment.MyStoryFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -83,16 +82,6 @@ public class MainActivity extends BaseActivity {
 
     public void initView() {
         setupDrawerMenu();
-
-//        FragmentManager fm = getSupportFragmentManager();
-//        if (fm.findFragmentByTag("CardRevealFragment") == null) {
-//            FragmentTransaction ft = fm.beginTransaction();
-//            ft.add(R.id.layout_container, CardRevealFragment.instance(), "CardRevealFragment")
-//                    .commit();
-//        } else {
-//            FragmentTransaction ft = fm.beginTransaction();
-//            ft.show(fm.findFragmentByTag("CardRevealFragment"));
-//        }
     }
 
     public void initFragment(Bundle bundle){
@@ -154,16 +143,12 @@ public class MainActivity extends BaseActivity {
                         mDrawerLayout.closeDrawers();
                         switch (menuItem.getItemId()){
                             case R.id.nav_home:
-                                changeFragment(CardRevealFragment.instance());
+                                changeFragment(GiphyListFragment.instance());
+                                //changeFragment(CardRevealFragment.instance());
                                 break;
                             case R.id.nav_messages:
-                                changeFragment(MyStoryFragment.instance());
-                                break;
-                            case R.id.nav_friends:
-                                changeFragment(GiphyListFragment.instance());
-                                break;
-                            case R.id.nav_discussion:
-
+                                changeFragment(CardRevealFragment.instance());
+                                //changeFragment(MyStoryFragment.instance());
                                 break;
                         }
                         return true;
