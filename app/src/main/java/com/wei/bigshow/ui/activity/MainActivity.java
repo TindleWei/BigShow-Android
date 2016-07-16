@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseActivity;
-import com.wei.bigshow.ui.fragment.CardRevealFragment;
+import com.wei.bigshow.ui.fragment.CreateListFragment;
 import com.wei.bigshow.ui.fragment.GiphyListFragment;
 
 import butterknife.Bind;
@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity {
             mFragment = getSupportFragmentManager().getFragment(bundle, STATE_ACTIVE_FRAGMENT);
         }
         if (mFragment == null) {
-            mFragment = CardRevealFragment.instance();
+            mFragment = GiphyListFragment.instance();
         }
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.layout_container,
@@ -147,7 +147,7 @@ public class MainActivity extends BaseActivity {
                                 //changeFragment(CardRevealFragment.instance());
                                 break;
                             case R.id.nav_messages:
-                                changeFragment(CardRevealFragment.instance());
+                                changeFragment(CreateListFragment.instance());
                                 //changeFragment(MyStoryFragment.instance());
                                 break;
                         }

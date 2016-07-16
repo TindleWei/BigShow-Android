@@ -29,5 +29,8 @@
     <string name="delete">DELETE</string>
 
     <string name="header_guide">Guide</string>
+    <string name="header_guide_content"><![CDATA[How To Make A Stroy Repo?  There Is Some Rules And Advices.  Click Here To Know More.]]></string>
+
+    <string name="create_new">Create A new Story Repo.</string>
 
 </resources>

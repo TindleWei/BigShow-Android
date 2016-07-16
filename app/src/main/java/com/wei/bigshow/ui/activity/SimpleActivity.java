@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseActivity;
@@ -20,7 +21,7 @@ import butterknife.Bind;
  * created by tindle
  * created time 16/7/8 下午10:39
  */
-public class SimpleActivity extends BaseActivity implements SearchView.OnQueryTextListener{
+public class SimpleActivity extends BaseActivity implements SearchView.OnQueryTextListener {
 
     public static final String ZEUS = "ZeusFragment";
     public static final String GIPHY_SEARCH = "GiphySearchFragment";
@@ -46,8 +47,7 @@ public class SimpleActivity extends BaseActivity implements SearchView.OnQueryTe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("");
+        initToolbar();
 
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -64,6 +64,22 @@ public class SimpleActivity extends BaseActivity implements SearchView.OnQueryTe
             ft.add(R.id.layout_container, GiphySearchFragment.instance(bundle), TAG)
                     .commit();
         }
+    }
+
+    public void initToolbar() {
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("");
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+
+        }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override

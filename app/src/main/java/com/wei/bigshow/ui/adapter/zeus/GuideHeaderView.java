@@ -1,11 +1,13 @@
 package com.wei.bigshow.ui.adapter.zeus;
 
 import android.content.Context;
+import android.widget.TextView;
 
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseAdapterItemView;
 import com.wei.bigshow.model.zeus.GuideHeaderItem;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -14,6 +16,9 @@ import butterknife.ButterKnife;
  * created time 16/7/8 下午11:18
  */
 public class GuideHeaderView extends BaseAdapterItemView<GuideHeaderItem> {
+
+    @Bind(R.id.textView)
+    TextView textView;
 
     public GuideHeaderView(Context context) {
         super(context);
@@ -42,7 +47,7 @@ public class GuideHeaderView extends BaseAdapterItemView<GuideHeaderItem> {
 
     @Override
     public void bind(final GuideHeaderItem item) {
-
+        textView.setSelected(true);//For marquee
 
     }
 }
