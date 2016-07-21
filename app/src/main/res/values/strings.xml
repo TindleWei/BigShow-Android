@@ -11,6 +11,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
+    <string name="action_more">More</string>
 
     <color name="line_gray">#C9CDC7</color>
 

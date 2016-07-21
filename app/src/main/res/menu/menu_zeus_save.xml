@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_save"
+        android:title="Create"
+        android:icon="@mipmap/ic_file_upload_white_24dp"
+        app:showAsAction="always"/>
+
+</menu>
