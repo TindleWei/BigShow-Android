@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--Palette-->
+    <color name="dark_primary_color">#512DA8</color>
+    <color name="default_primary_color">#673AB7</color>
+    <color name="light_primary_color">#D1C4E9</color>
+    <color name="text_primary_color">#FFFFFF</color>
+    <color name="accent_color">#FF4081</color>
+    <color name="primary_text_color">#212121</color>
+    <color name="secondary_text_color">#727272</color>
+    <color name="divider_color">#B6B6B6</color>
+
     <!-- Light Theme -->
     <color name="colorPrimary">#673ab7</color><!-- Deep Purple 500 -->
     <color name="colorPrimaryDark">#512da8</color><!-- Deep Purple 700 -->

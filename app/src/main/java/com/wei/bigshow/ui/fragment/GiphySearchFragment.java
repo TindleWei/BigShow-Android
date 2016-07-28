@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,14 +21,27 @@ import android.widget.Toast;
 
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseRecyclerFragment;
+import com.wei.bigshow.core.net.ApiManager;
+import com.wei.bigshow.model.network.GiphyEntity;
+import com.wei.bigshow.model.network.GiphyResponse;
 import com.wei.bigshow.model.story.PlotMeta;
 import com.wei.bigshow.model.view.LoadViewEntity;
+import com.wei.bigshow.ui.adapter.BadgeItemView;
 import com.wei.bigshow.ui.adapter.LoadMoreView;
 import com.wei.bigshow.ui.adapter.zeus.PlotMetaView;
+import com.wei.bigshow.ui.vandor.MultiStateView;
+import com.wei.bigshow.ui.vandor.keyevent.KeyEventUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import io.nlopez.smartadapters.SmartAdapter;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Zeus 跳转 图片搜索类
@@ -36,7 +50,14 @@ import io.nlopez.smartadapters.SmartAdapter;
 
 public class GiphySearchFragment extends BaseRecyclerFragment {
 
+    private final static String TAG = "GiphySearchFragment";
+
     private SearchView mSearchView;
+
+    private int offset = 0;
+
+    private boolean isSearching = false;
+    private String searchKey = "";
 
     public static GiphySearchFragment instance(Bundle bundle) {
         GiphySearchFragment fragment = new GiphySearchFragment();
@@ -55,44 +76,53 @@ public class GiphySearchFragment extends BaseRecyclerFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
         initView();
         initData();
     }
 
     public void initSearchView(final Menu menu) {
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
         if (searchItem != null) {
             MenuItemCompat.setOnActionExpandListener(
                     searchItem, new MenuItemCompat.OnActionExpandListener() {
                         @Override
                         public boolean onMenuItemActionExpand(MenuItem item) {
+                            isSearching = true;
                             return true;
                         }
 
                         @Override
                         public boolean onMenuItemActionCollapse(MenuItem item) {
+                            isSearching = false;
                             return true;
                         }
                     });
             mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
             mSearchView.setInputType(InputType.TYPE_TEXT_VARIATION_FILTER);
-            mSearchView.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_FULLSCREEN);
+            mSearchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_FULLSCREEN);
             mSearchView.setQueryHint(getString(R.string.action_search));
             mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
             mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    return onQueryTextChange(query);
+                    if (query.trim().equals("")) return true;
+                    Toast.makeText(getActivity(), query, Toast.LENGTH_SHORT).show();
+                    searchData(query, false);
+                    searchKey = query;
+                    KeyEventUtil.hideKeyboard(getActivity());
+                    return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    Toast.makeText(getActivity(), newText, Toast.LENGTH_SHORT).show();
+                    if (newText.trim().equals("")) return true;
+                    //Toast.makeText(getActivity(), newText, Toast.LENGTH_SHORT).show();
                     return true;
                 }
             });
+
+
         }
     }
 
@@ -121,6 +151,7 @@ public class GiphySearchFragment extends BaseRecyclerFragment {
         recyclerView.setLayoutManager(layoutManager);
         adapter = SmartAdapter.empty()
                 .map(PlotMeta.class, PlotMetaView.class)
+                .map(GiphyEntity.class, BadgeItemView.class)
                 .map(LoadViewEntity.class, LoadMoreView.class)
                 .into(recyclerView);
         swipeRefreshLayout.setEnabled(true);
@@ -131,18 +162,146 @@ public class GiphySearchFragment extends BaseRecyclerFragment {
     private void initData() {
         itemList = new ArrayList<>();
         itemList.add(new PlotMeta());
-        itemList.add(new PlotMeta());
-        itemList.add(new PlotMeta());
         adapter.setItems(itemList);
     }
 
     @Override
     protected void onMoreData() {
-        // do nothing
+        isLoadingMore = true;
+        adapter.addItem(loadmoreEntity);
+        recyclerView.scrollToPosition(itemList.size());
+
+        if(isSearching){
+            searchData(searchKey, true);
+        }else{
+            fetchData(true);
+        }
     }
 
     @Override
     protected void onRefreshData() {
         // do nothing
+        isLoadingMore = false;
+        if(isSearching){
+            searchData(searchKey, false);
+        }else{
+            fetchData();
+        }
+
+    }
+
+    private void fetchData() {
+        fetchData(false);
+    }
+
+
+    private void fetchData(final boolean isLoadMore) {
+
+        Subscriber mSubscriber = new Subscriber<GiphyResponse<List<GiphyEntity>>>() {
+            @Override
+            public void onCompleted() {
+                Log.e(TAG, "on Completed !");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "on Error !");
+            }
+
+            @Override
+            public void onNext(GiphyResponse<List<GiphyEntity>> giphyResponse) {
+                Log.e(TAG, "on Next !");
+                try {
+                    if (giphyResponse.data.size() == 0) {
+                        Log.e(TAG, "on size 0 !");
+                        return;
+                    }
+                    List<GiphyEntity> list = giphyResponse.data;
+                    if(isLoadMore){
+                        itemList.addAll(list);
+                    }else{
+                        itemList = list;
+                    }
+                    resetDataLoadLayout();
+                    adapter.setItems(itemList);
+                    multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
+
+                } catch (Exception e) {
+                }
+            }
+        };
+
+        Map<String, String> map = new HashMap<>();
+        map.put("rating", "g");
+        map.put("limit", "5");
+        offset = isLoadMore ? ++offset : 0;
+        map.put("offset", 5 * offset+"");
+
+        mSubscription = ApiManager.getInstance().apiService.getTrendingData(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                })
+                .subscribe(mSubscriber);
+
+    }
+
+    private void searchData(String searchKey, final boolean isLoadMore) {
+
+        Subscriber mSubscriber = new Subscriber<GiphyResponse<List<GiphyEntity>>>() {
+            @Override
+            public void onCompleted() {
+                Log.e(TAG, "on Completed !");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "on Error !");
+            }
+
+            @Override
+            public void onNext(GiphyResponse<List<GiphyEntity>> giphyResponse) {
+                Log.e(TAG, "on Next !");
+                try {
+                    if (giphyResponse.data.size() == 0) {
+                        Log.e(TAG, "on size 0 !");
+                        return;
+                    }
+                    List<GiphyEntity> list = giphyResponse.data;
+                    if(isLoadMore){
+                        itemList.addAll(list);
+                    }else{
+                        itemList = list;
+                    }
+                    resetDataLoadLayout();
+                    adapter.setItems(itemList);
+                    multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
+
+                } catch (Exception e) {
+                }
+            }
+        };
+
+        Map<String, String> map = new HashMap<>();
+        map.put("q", searchKey);
+        map.put("rating", "g");
+        map.put("limit", "5");
+        offset = isLoadMore ? ++offset : 0;
+        map.put("offset", 5 * offset+"");
+
+        mSubscription = ApiManager.getInstance().apiService.getSearchData(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                })
+                .subscribe(mSubscriber);
     }
 }

@@ -99,8 +99,6 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     // Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    // Soft Keyboard Listener
-    compile 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:1.0.0'
 
     compile 'com.ogaclejapan.smarttablayout:library:1.6.0@aar'
     compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.0@aar'
