@@ -1,14 +1,19 @@
 package com.wei.bigshow.ui.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.wei.bigshow.common.SharedPrefType;
 import com.wei.bigshow.common.base.BaseRecyclerFragment;
 import com.wei.bigshow.core.net.ApiManager;
-import com.wei.bigshow.model.BadgeItem;
 import com.wei.bigshow.model.network.GiphyEntity;
 import com.wei.bigshow.model.network.GiphyResponse;
 import com.wei.bigshow.model.view.LoadViewEntity;
@@ -23,6 +28,7 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import io.nlopez.smartadapters.SmartAdapter;
+import io.nlopez.smartadapters.utils.Mapper;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -31,6 +37,8 @@ import rx.schedulers.Schedulers;
 public class GiphyListFragment extends BaseRecyclerFragment {
 
     public static final String TAG = GiphyListFragment.class.getSimpleName();
+
+    private int offset = 0;
 
     public static GiphyListFragment instance() {
         GiphyListFragment fragment = new GiphyListFragment();
@@ -42,7 +50,8 @@ public class GiphyListFragment extends BaseRecyclerFragment {
         super.onActivityCreated(savedInstanceState);
 
         initView();
-        initData();
+        loadNativeJson();
+//        initData();
     }
 
 
@@ -56,6 +65,7 @@ public class GiphyListFragment extends BaseRecyclerFragment {
         swipeRefreshLayout.setEnabled(true);
         initRefreshLayout();
         initLoadMoreLayout(layoutManager);
+
     }
 
     /**
@@ -66,6 +76,11 @@ public class GiphyListFragment extends BaseRecyclerFragment {
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
+                int TYPE_LOADING_BOTTOM = Mapper.viewTypeFromViewClass(LoadMoreView.class);
+                int type = adapter.getItemViewType(position);
+                if(type==TYPE_LOADING_BOTTOM){
+                    return spanCount;
+                }
                 if (position % 3 == 0) {
                     return 2;
                 } else {
@@ -90,6 +105,10 @@ public class GiphyListFragment extends BaseRecyclerFragment {
 
     @Override
     protected void onMoreData() {
+        isLoadingMore = true;
+        adapter.addItem(loadmoreEntity);
+        recyclerView.scrollToPosition(itemList.size());
+        fetchData(true);
 
     }
 
@@ -119,10 +138,16 @@ public class GiphyListFragment extends BaseRecyclerFragment {
                         return;
                     }
                     List<GiphyEntity> list = giphyResponse.data;
-                    itemList = list;
+                    if(isLoadMore){
+                        itemList.addAll(list);
+                    }else{
+                        itemList = list;
+                    }
                     resetDataLoadLayout();
                     adapter.setItems(itemList);
                     multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
+
+                    saveNativeJson();
 
                 } catch (Exception e) {
                 }
@@ -131,7 +156,9 @@ public class GiphyListFragment extends BaseRecyclerFragment {
 
         Map<String, String> map = new HashMap<>();
         map.put("rating", "g");
-        map.put("limit", "20");
+        map.put("limit", "10");
+        offset = isLoadMore ? ++offset : 0;
+        map.put("offset", 10 * offset+"");
 
         mSubscription = ApiManager.getInstance().apiService.getTrendingData(map)
                 .subscribeOn(Schedulers.io())
@@ -143,27 +170,8 @@ public class GiphyListFragment extends BaseRecyclerFragment {
                     }
                 })
                 .subscribe(mSubscriber);
-
     }
 
-    private void testData(String data) {
-        List testList = new ArrayList();
-        testList.add(new BadgeItem("巴塞罗那"));
-        testList.add(new BadgeItem());
-        testList.add(new BadgeItem("巴塞罗那"));
-        testList.add(new BadgeItem("利物浦队"));
-        testList.add(new BadgeItem("阿森纳队"));
-        testList.add(new BadgeItem("广州恒大淘宝队"));
-        testList.add(new BadgeItem("阿森纳队"));
-        testList.add(new BadgeItem("阿森纳队"));
-
-        itemList = testList;
-        handler.obtainMessage(HandlerMsg.MSG_LOAD_LIST_SUC).sendToTarget();
-    }
-
-    private void parseData(String data) {
-
-    }
 
     @Override
     public void onDestroyView() {
@@ -207,6 +215,43 @@ public class GiphyListFragment extends BaseRecyclerFragment {
             }
         }
     };
+
+    public void loadNativeJson(){
+        multiStateView.setViewState(MultiStateView.VIEW_STATE_LOADING);
+
+        SharedPreferences sp = getContext().getSharedPreferences(SharedPrefType.SP_NAME, Context.MODE_PRIVATE);
+        String nativeJson = sp.getString(SharedPrefType.STORE_GIPHY_LIST, "");
+
+        try {
+            if (nativeJson == null || nativeJson.equals("")) {
+                itemList = new ArrayList();
+            } else {
+                Gson gson = new Gson();
+                List<GiphyEntity> list = gson.fromJson(nativeJson, new TypeToken<List<GiphyEntity>>() {
+                }.getType());
+                itemList = list;
+            }
+
+            resetDataLoadLayout();
+            adapter.setItems(itemList);
+        } catch (Exception e) {
+        }
+
+        if(itemList.size()>0){
+            multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
+        }else{
+            fetchData();
+        }
+    }
+
+    private void saveNativeJson(){
+        if (itemList.size() <= 0) return;
+        List saveList = itemList.subList(0, itemList.size());
+        Gson gson = new GsonBuilder().create();
+        String saveJson = gson.toJson(saveList);
+        SharedPreferences sp = getContext().getSharedPreferences(SharedPrefType.SP_NAME, Context.MODE_PRIVATE);
+        sp.edit().putString(SharedPrefType.STORE_GIPHY_LIST, saveJson).commit();
+    }
 
 }
 

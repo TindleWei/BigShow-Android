@@ -1,13 +1,12 @@
 package com.wei.bigshow.ui.adapter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
 
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseAdapterItemView;
 import com.wei.bigshow.model.CreateEmptyEntity;
-import com.wei.bigshow.ui.activity.SimpleActivity;
+import com.wei.bigshow.rx.RxBus;
 
 import butterknife.ButterKnife;
 
@@ -50,9 +49,9 @@ public class CreateEmptyView extends BaseAdapterItemView<CreateEmptyEntity> {
         this.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString(SimpleActivity.FRAGMENT_TYPE, SimpleActivity.ZEUS);
-                SimpleActivity.start(v.getContext(), bundle);
+
+                RxBus.getDefault().post(new CreateEmptyEntity());
+
             }
         });
 

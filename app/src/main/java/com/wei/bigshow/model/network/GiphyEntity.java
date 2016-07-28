@@ -9,19 +9,19 @@ public class GiphyEntity {
 
     public String type;
     public String id;
-    String slug;
-    String url;
-    String bitly_gif_url;
-    String bitly_url;
-    String embed_url;
-    String username;
-    String source;
-    String rating;
-    String content_url;
-    String source_tld;
-    String source_post_url;
-    String import_datetime;
-    String trending_datetime;
+    public String slug;
+    public String url;
+    public String bitly_gif_url;
+    public String bitly_url;
+    public String embed_url;
+    public String username;
+    public String source;
+    public String rating;
+    public String content_url;
+    public String source_tld;
+    public String source_post_url;
+    public String import_datetime;
+    public String trending_datetime;
     public Images images;
 
     /**

@@ -32,7 +32,6 @@ import com.wei.bigshow.ui.adapter.zeus.PlotMetaView;
 import com.wei.bigshow.ui.vandor.MultiStateView;
 import com.wei.bigshow.ui.vandor.keyevent.KeyEventUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -160,9 +159,11 @@ public class GiphySearchFragment extends BaseRecyclerFragment {
     }
 
     private void initData() {
-        itemList = new ArrayList<>();
-        itemList.add(new PlotMeta());
-        adapter.setItems(itemList);
+//        itemList = new ArrayList<>();
+//        itemList.add(new PlotMeta());
+//        adapter.setItems(itemList);
+
+        fetchData();
     }
 
     @Override

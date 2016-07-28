@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.pwittchen.prefser.library.Prefser;
+import com.wei.bigshow.rx.RxBus;
 import com.wei.bigshow.ui.view.LoadingView;
 
 import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 import rx.subscriptions.Subscriptions;
 
 /**
@@ -23,12 +25,16 @@ public abstract class BaseFragment extends Fragment {
     protected Subscription mSubscription;
     protected Prefser prefser;
     protected LoadingView loadingView;
+    protected RxBus _rxBus;
+    protected CompositeSubscription _subscriptions;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         prefser = new Prefser(getContext());
         mSubscription = Subscriptions.empty();
+        _rxBus = RxBus.getDefault();
+        _subscriptions = new CompositeSubscription();
     }
 
     @Nullable
@@ -55,6 +61,7 @@ public abstract class BaseFragment extends Fragment {
         super.onDestroyView();
 //        ButterKnife.unbind(this);
         unsubscribe();
+        _subscriptions.clear();
     }
 
     protected void unsubscribe() {

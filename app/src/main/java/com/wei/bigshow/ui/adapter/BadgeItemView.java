@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -25,6 +26,9 @@ public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
 
     @Bind(R.id.imageView)
     ImageView imageView;
+
+    @Bind(R.id.tv_slug)
+    TextView tvSlug;
 
     public BadgeItemView(Context context) {
         super(context);
@@ -79,11 +83,18 @@ public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
                     .dontAnimate()
                     .into(imageView);
         }
+
+        String[] slugs = item.slug.split("-");
+        StringBuilder slug = new StringBuilder();
+        for(int i=0; i<slugs.length-1;i++){
+            slug.append(" "+slugs[i]);
+        }
+        tvSlug.setText(slug);
     }
 
     @Override
     public void bind(final GiphyEntity item) {
-        this.setOnClickListener(new View.OnClickListener(){
+        this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
@@ -92,5 +103,12 @@ public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
             }
         });
 
+//        this.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                RxBus.getDefault().post(new GiphyTapEvent(item.images.fixed_width.url, item.slug));
+//                ((Activity)getContext()).finish();
+//            }
+//        });
     }
 }

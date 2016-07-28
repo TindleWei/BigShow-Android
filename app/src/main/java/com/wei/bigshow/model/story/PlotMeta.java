@@ -11,4 +11,13 @@ public class PlotMeta {
     public String src; //url
     public String srcType; //image , and video
     public String srcFrom; // giphy
+    public int pos;
+
+    public PlotMeta(int pos){
+        this.pos = pos;
+    }
+
+    public PlotMeta(){
+
+    }
 }

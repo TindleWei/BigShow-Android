@@ -16,6 +16,7 @@ import com.wei.bigshow.common.base.BaseRecyclerFragment;
 import com.wei.bigshow.model.story.PlotMeta;
 import com.wei.bigshow.model.story.PlotOptions;
 import com.wei.bigshow.model.zeus.GuideHeaderItem;
+import com.wei.bigshow.rx.event.GiphyTapEvent;
 import com.wei.bigshow.ui.adapter.zeus.GuideHeaderView;
 import com.wei.bigshow.ui.adapter.zeus.PlotMetaView;
 import com.wei.bigshow.ui.adapter.zeus.PlotOptionsView;
@@ -23,6 +24,7 @@ import com.wei.bigshow.ui.adapter.zeus.PlotOptionsView;
 import java.util.ArrayList;
 
 import io.nlopez.smartadapters.SmartAdapter;
+import rx.functions.Action1;
 
 /**
  * 具有上帝视角的故事编辑类
@@ -50,6 +52,7 @@ public class ZeusFragment extends BaseRecyclerFragment{
         initToolbar();
         initView();
         initData();
+        initEvent();
     }
 
     public void initToolbar() {
@@ -112,5 +115,28 @@ public class ZeusFragment extends BaseRecyclerFragment{
     @Override
     protected void onRefreshData() {
         // do nothing
+    }
+
+    public PlotMeta editPlotMeta = null;
+
+    public void initEvent() {
+
+        _subscriptions
+                .add(_rxBus.toObserverable().subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object event) {
+                        if (event instanceof GiphyTapEvent) {
+                            // here we come
+                            editPlotMeta.src = ((GiphyTapEvent) event).url;
+                            editPlotMeta.text = ((GiphyTapEvent) event).slug;
+                            itemList.remove(editPlotMeta.pos);
+                            itemList.add(editPlotMeta.pos, editPlotMeta);
+                            adapter.notifyDataSetChanged();
+                            Toast.makeText(getContext(), ((GiphyTapEvent) event).url, Toast.LENGTH_SHORT).show();
+                        } else if (event instanceof PlotMeta) {
+                            editPlotMeta = ((PlotMeta) event);
+                        }
+                    }
+                }));
     }
 }
