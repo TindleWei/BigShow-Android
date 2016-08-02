@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -56,7 +57,8 @@ public class GiphyListFragment extends BaseRecyclerFragment {
 
 
     private void initView() {
-        GridLayoutManager layoutManager = createGridLayoutManager(2);
+        // GridLayoutManager layoutManager = createGridLayoutManager(2);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         adapter = SmartAdapter.empty()
                 .map(GiphyEntity.class, BadgeItemView.class)
@@ -250,7 +252,7 @@ public class GiphyListFragment extends BaseRecyclerFragment {
         Gson gson = new GsonBuilder().create();
         String saveJson = gson.toJson(saveList);
         SharedPreferences sp = getContext().getSharedPreferences(SharedPrefType.SP_NAME, Context.MODE_PRIVATE);
-        sp.edit().putString(SharedPrefType.STORE_GIPHY_LIST, saveJson).commit();
+        sp.edit().putString(SharedPrefType.STORE_GIPHY_LIST, saveJson).apply();
     }
 
 }

@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.wei.bigshow.R;
@@ -54,6 +55,9 @@ public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
     public void bind(GiphyEntity item, int position) {
         super.bind(item, position);
 
+        String url = item.images.fixed_width.url;
+        String url_still =item.images.fixed_width_still.url;
+
         String url_width_gif = item.images.fixed_width.url;
         String url_height_gif = item.images.fixed_height_small.url;
         String url_still_width = item.images.fixed_width_still.url;
@@ -62,27 +66,33 @@ public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
         int width = Integer.valueOf(item.images.fixed_width.width);
         int height = Integer.valueOf(item.images.fixed_width.height);
 
-        if (position % 3 == 0) {
+
+        DrawableRequestBuilder<String> thumbnailRequest = Glide
+                .with( getContext() )
+                .load(url_still);
+
+//        if (position % 3 == 0) {
 
             imageView.getLayoutParams().height = (int) (mScreenWidth * 0.51);
 
             Glide.with(getContext())
-                    .load(url_width_gif)
+                    .load(url)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .placeholder(R.drawable.image_bg)
+                    .thumbnail(thumbnailRequest )
                     .dontAnimate()
                     .into(imageView);
-        } else {
-
-            imageView.getLayoutParams().height = (int) (mScreenWidth * 0.51);
-
-            Glide.with(getContext())
-                    .load(url_height_gif)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .placeholder(R.drawable.image_bg)
-                    .dontAnimate()
-                    .into(imageView);
-        }
+//        } else {
+//
+//            imageView.getLayoutParams().height = (int) (mScreenWidth * 0.51);
+//
+//            Glide.with(getContext())
+//                    .load(url)
+//                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+//                    .placeholder(R.drawable.image_bg)
+//                    .dontAnimate()
+//                    .into(imageView);
+//        }
 
         String[] slugs = item.slug.split("-");
         StringBuilder slug = new StringBuilder();
