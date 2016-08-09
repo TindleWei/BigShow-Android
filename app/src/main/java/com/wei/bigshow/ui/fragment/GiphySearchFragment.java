@@ -24,11 +24,9 @@ import com.wei.bigshow.common.base.BaseRecyclerFragment;
 import com.wei.bigshow.core.net.ApiManager;
 import com.wei.bigshow.model.network.GiphyEntity;
 import com.wei.bigshow.model.network.GiphyResponse;
-import com.wei.bigshow.model.story.PlotMeta;
 import com.wei.bigshow.model.view.LoadViewEntity;
-import com.wei.bigshow.ui.adapter.BadgeItemView;
+import com.wei.bigshow.ui.adapter.GiphyItemView;
 import com.wei.bigshow.ui.adapter.LoadMoreView;
-import com.wei.bigshow.ui.adapter.zeus.PlotMetaView;
 import com.wei.bigshow.ui.vandor.MultiStateView;
 import com.wei.bigshow.ui.vandor.keyevent.KeyEventUtil;
 
@@ -120,8 +118,6 @@ public class GiphySearchFragment extends BaseRecyclerFragment {
                     return true;
                 }
             });
-
-
         }
     }
 
@@ -149,8 +145,8 @@ public class GiphySearchFragment extends BaseRecyclerFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         adapter = SmartAdapter.empty()
-                .map(PlotMeta.class, PlotMetaView.class)
-                .map(GiphyEntity.class, BadgeItemView.class)
+//                .map(PlotMeta.class, PlotMetaView.class)
+                .map(GiphyEntity.class, GiphyItemView.class)
                 .map(LoadViewEntity.class, LoadMoreView.class)
                 .into(recyclerView);
         swipeRefreshLayout.setEnabled(true);
@@ -159,9 +155,6 @@ public class GiphySearchFragment extends BaseRecyclerFragment {
     }
 
     private void initData() {
-//        itemList = new ArrayList<>();
-//        itemList.add(new PlotMeta());
-//        adapter.setItems(itemList);
 
         fetchData();
     }

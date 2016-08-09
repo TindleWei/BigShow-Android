@@ -26,7 +26,7 @@
                 android:paddingLeft="20dp"
                 android:paddingTop="6dp"
                 android:text="@string/header_guide"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/primary_text_color"
                 android:textSize="24sp"
                 android:textStyle="italic" />
 
@@ -46,7 +46,7 @@
                 android:paddingTop="8dp"
                 android:singleLine="true"
                 android:text="@string/header_guide_content"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/secondary_text_color"
                 android:textSize="@dimen/dimen_16sp"
                 android:textStyle="bold" />
 

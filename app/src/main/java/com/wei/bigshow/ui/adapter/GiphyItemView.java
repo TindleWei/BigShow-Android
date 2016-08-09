@@ -1,7 +1,7 @@
 package com.wei.bigshow.ui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,7 +12,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseAdapterItemView;
 import com.wei.bigshow.model.network.GiphyEntity;
-import com.wei.bigshow.ui.activity.SimpleActivity;
+import com.wei.bigshow.rx.RxBus;
+import com.wei.bigshow.rx.event.GiphyTapEvent;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
  * created by weizepeng
  * created time 16/6/30 下午5:45
  */
-public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
+public class GiphyItemView extends BaseAdapterItemView<GiphyEntity> {
 
 
     @Bind(R.id.imageView)
@@ -31,7 +32,7 @@ public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
     @Bind(R.id.tv_slug)
     TextView tvSlug;
 
-    public BadgeItemView(Context context) {
+    public GiphyItemView(Context context) {
         super(context);
     }
 
@@ -91,21 +92,13 @@ public class BadgeItemView extends BaseAdapterItemView<GiphyEntity> {
 
     @Override
     public void bind(final GiphyEntity item) {
+
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString(SimpleActivity.FRAGMENT_TYPE, SimpleActivity.ZEUS);
-                SimpleActivity.start(v.getContext(), bundle);
+                RxBus.getDefault().post(new GiphyTapEvent(item.images.fixed_width.url, item.slug));
+                ((Activity)getContext()).finish();
             }
         });
-
-//        this.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                RxBus.getDefault().post(new GiphyTapEvent(item.images.fixed_width.url, item.slug));
-//                ((Activity)getContext()).finish();
-//            }
-//        });
     }
 }

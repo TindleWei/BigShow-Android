@@ -75,4 +75,9 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="animation_slide_from_right">
+        <item name="android:windowEnterAnimation">@anim/fab_slide_in_from_right</item>
+        <item name="android:windowExitAnimation">@anim/fab_slide_out_to_left</item>
+    </style>
+
 </resources>

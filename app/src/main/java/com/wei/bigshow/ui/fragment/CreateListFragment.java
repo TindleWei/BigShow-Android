@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -56,7 +54,7 @@ public class CreateListFragment extends BaseRecyclerFragment {
         initView();
         loadNativeJson();
         initEvent();
-        initRecycleSwipe();
+        setupRecycleSwipe();
     }
 
     private void initView() {
@@ -72,7 +70,7 @@ public class CreateListFragment extends BaseRecyclerFragment {
         initLoadMoreLayout(layoutManager);
     }
 
-    private void initRecycleSwipe() {
+    private void setupRecycleSwipe() {
         ItemTouchHelper.SimpleCallback mCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.ACTION_STATE_SWIPE) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -166,7 +164,6 @@ public class CreateListFragment extends BaseRecyclerFragment {
         resetDataLoadLayout();
         //save
         saveNativeJson();
-
     }
 
     public void saveNativeJson() {
@@ -237,60 +234,12 @@ public class CreateListFragment extends BaseRecyclerFragment {
 
     }
 
-    private void testData(String data) {
-        List testList = new ArrayList();
-        testList.add(new CreateEmptyEntity());
-
-        itemList = testList;
-        handler.obtainMessage(HandlerMsg.MSG_LOAD_LIST_SUC).sendToTarget();
-    }
-
-    private void parseData(String data) {
-
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
 
-    public interface HandlerMsg {
-        int MSG_LOAD_LIST_SUC = 2102;
-        int MSG_LOAD_LIST_FAIL = 2008;
-        int MSG_LOAD_LIST_EMPTY = 2106;
-    }
-
-    private Handler handler = new Handler() {
-        @Override
-        public void dispatchMessage(Message msg) {
-            super.dispatchMessage(msg);
-            switch (msg.what) {
-                case HandlerMsg.MSG_LOAD_LIST_SUC:
-                    resetDataLoadLayout();
-                    adapter.setItems(itemList);
-                    multiStateView.setViewState(MultiStateView.VIEW_STATE_CONTENT);
-                    break;
-
-                case HandlerMsg.MSG_LOAD_LIST_EMPTY:
-                    resetDataLoadLayout();
-                    if (itemList.size() == 0) {
-                        multiStateView.setViewState(MultiStateView.VIEW_STATE_EMPTY);
-                    } else {
-//                    ToastUtils.toast(getActivity(), R.string.no_more_data);
-                    }
-                    break;
-                case HandlerMsg.MSG_LOAD_LIST_FAIL:
-                    resetDataLoadLayout();
-                    if (itemList.size() == 0) {
-                        multiStateView.setViewState(MultiStateView.VIEW_STATE_ERROR);
-                    } else {
-//                    ToastUtils.toast(getActivity(), R.string.fail_to_load);
-                    }
-                    break;
-            }
-        }
-    };
 
 }
 

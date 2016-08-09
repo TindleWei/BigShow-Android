@@ -18,6 +18,7 @@ import com.wei.bigshow.R;
 import com.wei.bigshow.common.base.BaseActivity;
 import com.wei.bigshow.ui.fragment.CreateListFragment;
 import com.wei.bigshow.ui.fragment.GiphyListFragment;
+import com.wei.bigshow.ui.fragment.MyStoryFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -148,6 +149,10 @@ public class MainActivity extends BaseActivity {
                                 break;
                             case R.id.nav_messages:
                                 changeFragment(CreateListFragment.instance());
+                                //changeFragment(MyStoryFragment.instance());
+                                break;
+                            case R.id.nav_friends:
+                                changeFragment(MyStoryFragment.instance());
                                 //changeFragment(MyStoryFragment.instance());
                                 break;
                         }
