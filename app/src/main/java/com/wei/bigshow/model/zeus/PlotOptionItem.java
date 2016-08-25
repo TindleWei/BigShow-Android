@@ -6,4 +6,6 @@ package com.wei.bigshow.model.zeus;
  * created time 16/8/2 上午10:57
  */
 public class PlotOptionItem {
+
+    public boolean isEnd = false;
 }

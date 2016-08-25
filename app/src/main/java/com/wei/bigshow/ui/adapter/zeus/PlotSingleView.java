@@ -29,8 +29,14 @@ public class PlotSingleView extends BaseAdapterItemView<PlotSingleItem> {
     ImageView imageView;
     @Bind(R.id.textView)
     TextView textView;
-    @Bind(R.id.layout_swipe)
-    LinearLayout layoutSwipe;
+    @Bind(R.id.iv_delete)
+    public ImageView ivDelete;
+    @Bind(R.id.iv_add)
+    public ImageView ivAdd;
+    @Bind(R.id.clipForeground)
+    public LinearLayout clipForeground;
+    @Bind(R.id.leftBackground)
+    public LinearLayout leftBackground;
 
 
     public PlotSingleView(Context context) {
@@ -92,7 +98,4 @@ public class PlotSingleView extends BaseAdapterItemView<PlotSingleItem> {
 
     }
 
-    public View getSwipedLayout(){
-        return layoutSwipe;
-    }
 }
